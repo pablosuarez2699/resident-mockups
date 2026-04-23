@@ -1,0 +1,990 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Resident Magazine — Client Portal</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Jost:wght@300;400;500;600&display=swap" rel="stylesheet" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --black: #0a0a0a;
+  --white: #ffffff;
+  --gray-50: #fafafa;
+  --gray-100: #f4f4f4;
+  --gray-200: #e8e8e8;
+  --gray-400: #999;
+  --gray-500: #777;
+  --gray-600: #555;
+  --gold: #b8965a;
+  --gold-light: #d4b07a;
+  --sidebar-w: 240px;
+  --green: #2d7a4f;
+  --green-light: #e8f4ee;
+  --amber: #a0650a;
+  --amber-light: #fef3e2;
+  --blue: #1a4f7a;
+  --blue-light: #e8f0f8;
+}
+
+body {
+  font-family: 'Jost', sans-serif;
+  background: var(--gray-50);
+  color: var(--black);
+  font-weight: 300;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── TOP NAV ── */
+.topnav {
+  background: var(--black);
+  color: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  height: 56px;
+  position: sticky;
+  top: 0;
+  z-index: 200;
+  flex-shrink: 0;
+}
+.topnav-logo {
+  font-family: 'Playfair Display', serif;
+  font-size: 17px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--white);
+}
+.topnav-logo span {
+  display: block;
+  font-family: 'Jost', sans-serif;
+  font-size: 8px;
+  font-weight: 400;
+  letter-spacing: 0.3em;
+  color: var(--gold);
+  text-transform: uppercase;
+  margin-top: 1px;
+}
+.topnav-right {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+.topnav-client {
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  color: rgba(255,255,255,0.6);
+}
+.topnav-client strong {
+  color: var(--white);
+  font-weight: 500;
+}
+.topnav-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--gold);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--white);
+  letter-spacing: 0.05em;
+}
+.topnav-logout {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,0.4);
+  cursor: pointer;
+  transition: color 0.2s;
+  background: none;
+  border: none;
+  font-family: 'Jost', sans-serif;
+}
+.topnav-logout:hover { color: var(--white); }
+
+/* ── LAYOUT ── */
+.layout {
+  display: flex;
+  flex: 1;
+}
+
+/* ── SIDEBAR ── */
+.sidebar {
+  width: var(--sidebar-w);
+  background: var(--white);
+  border-right: 1px solid var(--gray-200);
+  padding: 32px 0;
+  flex-shrink: 0;
+  position: sticky;
+  top: 56px;
+  height: calc(100vh - 56px);
+  overflow-y: auto;
+}
+.sidebar-section {
+  margin-bottom: 32px;
+}
+.sidebar-label {
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gray-400);
+  padding: 0 24px;
+  margin-bottom: 8px;
+}
+.sidebar-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 24px;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--gray-600);
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s;
+  letter-spacing: 0.02em;
+}
+.sidebar-item:hover { background: var(--gray-100); color: var(--black); }
+.sidebar-item.active {
+  background: var(--gray-100);
+  color: var(--black);
+  font-weight: 500;
+}
+.sidebar-item.active::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  width: 2px;
+  height: 36px;
+  background: var(--gold);
+}
+.sidebar-item { position: relative; }
+.sidebar-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--gold);
+  flex-shrink: 0;
+}
+.sidebar-icon {
+  width: 16px;
+  height: 16px;
+  opacity: 0.5;
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+.sidebar-item.active .sidebar-icon { opacity: 1; }
+.sidebar-badge {
+  margin-left: auto;
+  background: var(--gold);
+  color: var(--white);
+  font-size: 9px;
+  font-weight: 600;
+  padding: 2px 6px;
+  border-radius: 10px;
+  letter-spacing: 0.05em;
+}
+
+/* ── MAIN ── */
+.main {
+  flex: 1;
+  padding: 40px 48px;
+  max-width: 1100px;
+}
+
+.page-header {
+  margin-bottom: 40px;
+}
+.page-header h1 {
+  font-family: 'Playfair Display', serif;
+  font-size: 28px;
+  font-weight: 400;
+  line-height: 1.2;
+  margin-bottom: 6px;
+}
+.page-header p {
+  font-size: 13px;
+  color: var(--gray-500);
+  font-weight: 300;
+  letter-spacing: 0.02em;
+}
+
+/* ── SECTION ── */
+.section {
+  margin-bottom: 48px;
+}
+.section-title {
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 20px;
+}
+
+/* ── ORDER CARD ── */
+.order-card {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  padding: 28px 32px;
+  margin-bottom: 12px;
+}
+.order-card-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+.order-id {
+  font-size: 10px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gray-400);
+  margin-bottom: 4px;
+}
+.order-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 18px;
+  font-weight: 400;
+}
+.order-date {
+  font-size: 11px;
+  color: var(--gray-400);
+  margin-top: 3px;
+}
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 5px 12px;
+  border-radius: 2px;
+}
+.status-pill.confirmed {
+  background: var(--green-light);
+  color: var(--green);
+}
+.status-pill.pending {
+  background: var(--amber-light);
+  color: var(--amber);
+}
+.status-pill.published {
+  background: var(--black);
+  color: var(--white);
+}
+.status-pill::before {
+  content: '';
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: currentColor;
+}
+
+.order-items {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+.order-item-tag {
+  font-size: 11px;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  color: var(--gray-600);
+  background: var(--gray-100);
+  padding: 4px 10px;
+  border: 1px solid var(--gray-200);
+}
+
+.order-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 16px;
+  border-top: 1px solid var(--gray-200);
+}
+.order-payment-line {
+  display: flex;
+  gap: 32px;
+}
+.payment-item label {
+  display: block;
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--gray-400);
+  margin-bottom: 3px;
+}
+.payment-item value {
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--black);
+}
+.payment-item value.muted { color: var(--gray-400); text-decoration: line-through; font-weight: 300; font-size: 13px; }
+.payment-item value.due { color: var(--amber); }
+
+/* ── ARTICLE PIPELINE ── */
+.pipeline-card {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  margin-bottom: 12px;
+}
+.pipeline-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 28px;
+  cursor: pointer;
+}
+.pipeline-card-header:hover { background: var(--gray-50); }
+.pipeline-article-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 16px;
+  font-weight: 400;
+  margin-bottom: 4px;
+}
+.pipeline-meta {
+  font-size: 11px;
+  color: var(--gray-400);
+  letter-spacing: 0.03em;
+}
+.pipeline-card-body {
+  border-top: 1px solid var(--gray-200);
+  padding: 24px 28px;
+}
+
+/* ── PROGRESS TRACKER ── */
+.tracker {
+  display: flex;
+  align-items: flex-start;
+  gap: 0;
+  margin-bottom: 24px;
+}
+.tracker-step {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+}
+.tracker-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 12px;
+  left: 50%;
+  width: 100%;
+  height: 1px;
+  background: var(--gray-200);
+  z-index: 0;
+}
+.tracker-step.done:not(:last-child)::after { background: var(--gold); }
+.tracker-dot {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid var(--gray-200);
+  background: var(--white);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+  flex-shrink: 0;
+}
+.tracker-step.done .tracker-dot {
+  border-color: var(--gold);
+  background: var(--gold);
+}
+.tracker-step.active .tracker-dot {
+  border-color: var(--black);
+  background: var(--white);
+}
+.tracker-step.done .tracker-dot::after {
+  content: '';
+  width: 8px;
+  height: 5px;
+  border-left: 2px solid var(--white);
+  border-bottom: 2px solid var(--white);
+  transform: rotate(-45deg) translate(1px, -1px);
+  display: block;
+}
+.tracker-step.active .tracker-dot::after {
+  content: '';
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--black);
+  display: block;
+}
+.tracker-label {
+  font-size: 10px;
+  text-align: center;
+  margin-top: 8px;
+  letter-spacing: 0.05em;
+  color: var(--gray-400);
+  line-height: 1.3;
+  max-width: 80px;
+}
+.tracker-step.done .tracker-label { color: var(--black); font-weight: 500; }
+.tracker-step.active .tracker-label { color: var(--black); font-weight: 600; }
+
+.pipeline-note {
+  background: var(--amber-light);
+  border: 1px solid rgba(160, 101, 10, 0.15);
+  padding: 12px 16px;
+  font-size: 12px;
+  color: var(--amber);
+  line-height: 1.6;
+  margin-bottom: 12px;
+}
+.pipeline-note strong { font-weight: 600; }
+
+.pipeline-actions {
+  display: flex;
+  gap: 10px;
+}
+.btn {
+  font-family: 'Jost', sans-serif;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 9px 20px;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+  border: none;
+}
+.btn-primary { background: var(--black); color: var(--white); }
+.btn-primary:hover { background: #333; }
+.btn-ghost { background: transparent; color: var(--black); border: 1px solid var(--gray-200); }
+.btn-ghost:hover { border-color: var(--black); }
+
+/* ── PUBLISHED CONTENT ── */
+.published-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+.published-card {
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+  overflow: hidden;
+}
+.published-img {
+  height: 160px;
+  background: var(--black);
+  position: relative;
+  overflow: hidden;
+}
+.published-img-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, transparent 60%);
+}
+.published-category {
+  position: absolute;
+  top: 14px;
+  left: 16px;
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--gold);
+  background: rgba(0,0,0,0.5);
+  padding: 3px 8px;
+}
+.published-img-text {
+  position: absolute;
+  bottom: 14px;
+  left: 16px;
+  right: 16px;
+  font-family: 'Playfair Display', serif;
+  font-size: 15px;
+  color: var(--white);
+  line-height: 1.3;
+  font-style: italic;
+}
+/* Decorative placeholder images using CSS patterns */
+.img-1 {
+  background: #1a1a1a;
+  background-image:
+    repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(184,150,90,0.05) 10px, rgba(184,150,90,0.05) 20px);
+}
+.img-2 {
+  background: #111;
+  background-image:
+    repeating-linear-gradient(-45deg, transparent, transparent 8px, rgba(255,255,255,0.03) 8px, rgba(255,255,255,0.03) 16px);
+}
+.img-3 {
+  background: #0d0d0d;
+  background-image:
+    radial-gradient(circle at 30% 50%, rgba(184,150,90,0.15) 0%, transparent 60%);
+}
+
+.published-body { padding: 18px 20px; }
+.published-meta {
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gray-400);
+  margin-bottom: 8px;
+}
+.published-title {
+  font-family: 'Playfair Display', serif;
+  font-size: 15px;
+  font-weight: 400;
+  line-height: 1.4;
+  margin-bottom: 14px;
+}
+.published-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.published-stats {
+  display: flex;
+  gap: 14px;
+}
+.pub-stat {
+  font-size: 11px;
+  color: var(--gray-400);
+}
+.pub-stat strong {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--black);
+  line-height: 1;
+  margin-bottom: 1px;
+}
+.view-link {
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--black);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 500;
+}
+.view-link:hover { color: var(--gold); }
+.view-link::after { content: '→'; }
+
+/* ── EMPTY STATE ── */
+.empty-state {
+  text-align: center;
+  padding: 48px 24px;
+  background: var(--white);
+  border: 1px solid var(--gray-200);
+}
+.empty-state p {
+  font-size: 13px;
+  color: var(--gray-400);
+  margin-top: 8px;
+  max-width: 280px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.6;
+}
+
+/* ── TABS ── */
+.tabs {
+  display: flex;
+  gap: 0;
+  border-bottom: 1px solid var(--gray-200);
+  margin-bottom: 28px;
+}
+.tab {
+  font-family: 'Jost', sans-serif;
+  font-size: 12px;
+  font-weight: 400;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--gray-400);
+  padding: 12px 20px;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color 0.2s, border-color 0.2s;
+  background: none;
+  border-left: none;
+  border-right: none;
+  border-top: none;
+}
+.tab:hover { color: var(--black); }
+.tab.active { color: var(--black); border-bottom-color: var(--gold); font-weight: 500; }
+
+/* ── NOTIFICATION BANNER ── */
+.notif-banner {
+  background: var(--black);
+  color: var(--white);
+  padding: 12px 20px;
+  font-size: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 28px;
+  letter-spacing: 0.03em;
+}
+.notif-dot {
+  width: 8px;
+  height: 8px;
+  background: var(--gold);
+  border-radius: 50%;
+  flex-shrink: 0;
+  animation: pulse 2s infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+.notif-banner a {
+  color: var(--gold);
+  text-decoration: none;
+  font-weight: 500;
+  margin-left: auto;
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+</style>
+</head>
+<body>
+
+<!-- TOP NAV -->
+<nav class="topnav">
+  <div class="topnav-logo">
+    Resident
+    <span>A Luxury Lifestyle Magazine</span>
+  </div>
+  <div class="topnav-right">
+    <div class="topnav-client">Signed in as <strong>Sarah Mitchell</strong></div>
+    <div class="topnav-avatar">SM</div>
+    <button class="topnav-logout">Sign Out</button>
+  </div>
+</nav>
+
+<div class="layout">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar">
+    <div class="sidebar-section">
+      <div class="sidebar-label">My Account</div>
+      <div class="sidebar-item active">
+        <span class="sidebar-icon">📋</span>
+        My Orders
+      </div>
+      <div class="sidebar-item">
+        <span class="sidebar-icon">📝</span>
+        Article Status
+        <span class="sidebar-badge">1</span>
+      </div>
+      <div class="sidebar-item">
+        <span class="sidebar-icon">🔗</span>
+        Published Content
+      </div>
+    </div>
+    <div class="sidebar-section">
+      <div class="sidebar-label">Support</div>
+      <div class="sidebar-item">
+        <span class="sidebar-icon">✉️</span>
+        Contact Editorial
+      </div>
+      <div class="sidebar-item">
+        <span class="sidebar-icon">📖</span>
+        Submission Guide
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN CONTENT -->
+  <main class="main">
+
+    <!-- NOTIFICATION BANNER -->
+    <div class="notif-banner">
+      <div class="notif-dot"></div>
+      Your article "The Future of Sustainable Luxury" is currently under editorial review.
+      <a href="#">View Status →</a>
+    </div>
+
+    <!-- PAGE HEADER -->
+    <div class="page-header">
+      <h1>Welcome back, Sarah.</h1>
+      <p>Manage your placements, track article status, and view your published features.</p>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab active" onclick="showTab('orders', this)">My Orders</button>
+      <button class="tab" onclick="showTab('articles', this)">Article Status</button>
+      <button class="tab" onclick="showTab('published', this)">Published Content</button>
+    </div>
+
+    <!-- ── ORDERS TAB ── -->
+    <div id="tab-orders">
+
+      <div class="section">
+        <div class="section-title">Active Orders</div>
+
+        <!-- Order 1 — Active -->
+        <div class="order-card">
+          <div class="order-card-header">
+            <div>
+              <div class="order-id">Order #RM-2026-0041</div>
+              <div class="order-title">Guest Editorial + Newsletter Feature</div>
+              <div class="order-date">Placed April 18, 2026</div>
+            </div>
+            <span class="status-pill confirmed">Confirmed</span>
+          </div>
+          <div class="order-items">
+            <span class="order-item-tag">Guest Editorial — $450</span>
+            <span class="order-item-tag">Newsletter Feature — +$950</span>
+          </div>
+          <div class="order-footer">
+            <div class="order-payment-line">
+              <div class="payment-item">
+                <label>Order Total</label>
+                <value>$1,400</value>
+              </div>
+              <div class="payment-item">
+                <label>Deposit Paid</label>
+                <value style="color: var(--green);">$700 ✓</value>
+              </div>
+              <div class="payment-item">
+                <label>Balance Due on Delivery</label>
+                <value class="due">$700</value>
+              </div>
+            </div>
+            <button class="btn btn-ghost">View Invoice</button>
+          </div>
+        </div>
+
+        <!-- Order 2 — Published -->
+        <div class="order-card">
+          <div class="order-card-header">
+            <div>
+              <div class="order-id">Order #RM-2026-0019</div>
+              <div class="order-title">Editorial Feature + 30-Day Homepage Pin</div>
+              <div class="order-date">Placed February 3, 2026</div>
+            </div>
+            <span class="status-pill published">Published</span>
+          </div>
+          <div class="order-items">
+            <span class="order-item-tag">Editorial Feature — $1,500</span>
+            <span class="order-item-tag">30-Day Homepage Pin — +$200</span>
+            <span class="order-item-tag">Instagram Feed Post — +$600</span>
+          </div>
+          <div class="order-footer">
+            <div class="order-payment-line">
+              <div class="payment-item">
+                <label>Order Total</label>
+                <value>$2,300</value>
+              </div>
+              <div class="payment-item">
+                <label>Payment</label>
+                <value style="color: var(--green);">Paid in Full ✓</value>
+              </div>
+            </div>
+            <a href="#" class="view-link">View Article</a>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ── ARTICLES TAB ── -->
+    <div id="tab-articles" style="display:none;">
+
+      <div class="section">
+        <div class="section-title">Article Pipeline</div>
+
+        <!-- Article 1 — In Review -->
+        <div class="pipeline-card">
+          <div class="pipeline-card-header">
+            <div>
+              <div class="pipeline-article-title">The Future of Sustainable Luxury</div>
+              <div class="pipeline-meta">Order #RM-2026-0041 · Guest Editorial · Submitted April 19, 2026</div>
+            </div>
+            <span class="status-pill pending">In Review</span>
+          </div>
+          <div class="pipeline-card-body">
+            <div class="tracker">
+              <div class="tracker-step done">
+                <div class="tracker-dot"></div>
+                <div class="tracker-label">Submitted</div>
+              </div>
+              <div class="tracker-step active">
+                <div class="tracker-dot"></div>
+                <div class="tracker-label">Editorial Review</div>
+              </div>
+              <div class="tracker-step">
+                <div class="tracker-dot"></div>
+                <div class="tracker-label">Edits / Approval</div>
+              </div>
+              <div class="tracker-step">
+                <div class="tracker-dot"></div>
+                <div class="tracker-label">Scheduled</div>
+              </div>
+              <div class="tracker-step">
+                <div class="tracker-dot"></div>
+                <div class="tracker-label">Published</div>
+              </div>
+            </div>
+            <div class="pipeline-note">
+              <strong>Editorial team note:</strong> Your article is currently being reviewed. We may reach out within 2–3 business days if any edits are required before scheduling.
+            </div>
+            <div class="pipeline-actions">
+              <button class="btn btn-ghost">Download Submitted Article</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Article 2 — Published -->
+        <div class="pipeline-card">
+          <div class="pipeline-card-header">
+            <div>
+              <div class="pipeline-article-title">Redefining Wellness in the Modern Home</div>
+              <div class="pipeline-meta">Order #RM-2026-0019 · Editorial Feature · Published March 12, 2026</div>
+            </div>
+            <span class="status-pill published">Published</span>
+          </div>
+          <div class="pipeline-card-body">
+            <div class="tracker">
+              <div class="tracker-step done">
+                <div class="tracker-dot"></div>
+                <div class="tracker-label">Submitted</div>
+              </div>
+              <div class="tracker-step done">
+                <div class="tracker-dot"></div>
+                <div class="tracker-label">Editorial Review</div>
+              </div>
+              <div class="tracker-step done">
+                <div class="tracker-dot"></div>
+                <div class="tracker-label">Edits / Approval</div>
+              </div>
+              <div class="tracker-step done">
+                <div class="tracker-dot"></div>
+                <div class="tracker-label">Scheduled</div>
+              </div>
+              <div class="tracker-step done">
+                <div class="tracker-dot"></div>
+                <div class="tracker-label">Published</div>
+              </div>
+            </div>
+            <div class="pipeline-actions">
+              <a href="#" class="btn btn-primary">View Live Article</a>
+              <button class="btn btn-ghost">Download PDF</button>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+    <!-- ── PUBLISHED TAB ── -->
+    <div id="tab-published" style="display:none;">
+
+      <div class="section">
+        <div class="section-title">Your Published Features</div>
+        <div class="published-grid">
+
+          <!-- Article 1 -->
+          <div class="published-card">
+            <div class="published-img img-2">
+              <div class="published-img-overlay"></div>
+              <div class="published-category">Editorial Feature</div>
+              <div class="published-img-text">Redefining Wellness in the Modern Home</div>
+            </div>
+            <div class="published-body">
+              <div class="published-meta">Published March 12, 2026 · Luxury &amp; Lifestyle</div>
+              <div class="published-title">Redefining Wellness in the Modern Home</div>
+              <div class="published-footer">
+                <div class="published-stats">
+                  <div class="pub-stat"><strong>4.2K</strong> Views</div>
+                  <div class="pub-stat"><strong>38</strong> Shares</div>
+                  <div class="pub-stat"><strong>12</strong> days pinned</div>
+                </div>
+                <a href="#" class="view-link">Read</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Article 2 -->
+          <div class="published-card">
+            <div class="published-img img-3">
+              <div class="published-img-overlay"></div>
+              <div class="published-category">Resource Guide</div>
+              <div class="published-img-text">The Art of Intentional Interior Design</div>
+            </div>
+            <div class="published-body">
+              <div class="published-meta">Published January 7, 2026 · Design</div>
+              <div class="published-title">The Art of Intentional Interior Design</div>
+              <div class="published-footer">
+                <div class="published-stats">
+                  <div class="pub-stat"><strong>1.8K</strong> Views</div>
+                  <div class="pub-stat"><strong>14</strong> Shares</div>
+                </div>
+                <a href="#" class="view-link">Read</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+</div>
+
+<script>
+function showTab(tab, el) {
+  // Hide all tabs
+  document.getElementById('tab-orders').style.display = 'none';
+  document.getElementById('tab-articles').style.display = 'none';
+  document.getElementById('tab-published').style.display = 'none';
+  // Remove active from all tab buttons
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  // Show selected
+  document.getElementById('tab-' + tab).style.display = 'block';
+  el.classList.add('active');
+}
+
+// Sidebar navigation feel
+document.querySelectorAll('.sidebar-item').forEach(item => {
+  item.addEventListener('click', function() {
+    document.querySelectorAll('.sidebar-item').forEach(i => i.classList.remove('active'));
+    this.classList.add('active');
+    // Map sidebar items to tabs
+    const text = this.textContent.trim();
+    const tabBtn = document.querySelector('.tabs .tab');
+    if (text.includes('My Orders')) {
+      showTab('orders', document.querySelectorAll('.tab')[0]);
+    } else if (text.includes('Article Status')) {
+      showTab('articles', document.querySelectorAll('.tab')[1]);
+    } else if (text.includes('Published')) {
+      showTab('published', document.querySelectorAll('.tab')[2]);
+    }
+  });
+});
+</script>
+</body>
+</html>

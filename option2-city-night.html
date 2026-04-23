@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Resident Magazine — Editorial Placements V2</title>
+<link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,wght@0,400;0,500;0,700;1,400&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{--dark:#0f1218;--dark-2:#171c24;--dark-3:#1e2430;--cream:#f0eeea;--gold:#c9a347;--gold-2:#e2bb68;--gold-dim:rgba(201,163,71,0.15);--text-dim:rgba(240,238,234,0.55);--text-muted:rgba(240,238,234,0.32)}
+html{scroll-behavior:smooth}
+body{font-family:'Raleway',sans-serif;background:var(--dark);color:var(--cream);font-weight:400;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;background-image:radial-gradient(ellipse at 20% 30%,rgba(30,60,120,0.06) 0%,transparent 50%),radial-gradient(ellipse at 80% 70%,rgba(201,163,71,0.04) 0%,transparent 45%),repeating-linear-gradient(115deg,transparent 0px,transparent 130px,rgba(255,255,255,0.006) 130px,rgba(255,255,255,0.006) 131px)}
+body>*{position:relative;z-index:1}
+
+nav{display:flex;align-items:center;justify-content:space-between;padding:18px 60px;border-bottom:1px solid rgba(201,163,71,0.15);position:absolute;top:0;left:0;right:0;z-index:100}
+.nav-wordmark{font-family:'Bodoni Moda',serif;font-size:19px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:#fff;line-height:1}
+.nav-tagline{font-size:8px;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold);margin-top:3px;font-weight:500}
+.nav-cta{font-size:10px;font-weight:600;letter-spacing:0.16em;text-transform:uppercase;color:var(--dark);background:var(--gold);padding:9px 22px;border:none;cursor:pointer;transition:background .2s;text-decoration:none}
+.nav-cta:hover{background:var(--gold-2)}
+
+/* HERO V2 — NYC aerial night, dramatic fade */
+.hero-wrap{position:relative;height:560px;overflow:hidden}
+.hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1920&q=80') center 40%/cover no-repeat}
+.hero-gradient{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(15,18,24,0.6) 0%,rgba(15,18,24,0.3) 20%,rgba(15,18,24,0.5) 50%,rgba(15,18,24,0.88) 75%,rgba(15,18,24,1) 100%)}
+.hero-content{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:80px 60px 40px;z-index:2}
+.hero-eyebrow{font-size:9px;letter-spacing:0.38em;text-transform:uppercase;color:var(--gold);margin-bottom:18px;font-weight:500}
+.hero h1{font-family:'Bodoni Moda',serif;font-size:clamp(30px,4vw,50px);font-weight:400;line-height:1.25;color:#fff;max-width:700px;margin-bottom:16px}
+.hero h1 em{font-style:italic;color:var(--gold)}
+.hero-sub{font-size:13px;color:rgba(255,255,255,0.55);max-width:500px;line-height:1.75;font-weight:300;margin-bottom:32px}
+.hero-actions{display:flex;gap:14px;flex-wrap:wrap;justify-content:center}
+.hero-btn-primary{font-size:10px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;padding:13px 30px;background:var(--gold);color:var(--dark);border:none;cursor:pointer;text-decoration:none;transition:background .2s;font-family:'Raleway',sans-serif}
+.hero-btn-primary:hover{background:var(--gold-2)}
+.hero-btn-outline{font-size:10px;font-weight:600;letter-spacing:0.18em;text-transform:uppercase;padding:12px 30px;background:transparent;border:1px solid rgba(255,255,255,0.35);color:#fff;text-decoration:none;transition:border-color .2s,color .2s;font-family:'Raleway',sans-serif}
+.hero-btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+
+.trust-section{padding:24px 60px;border-bottom:1px solid rgba(255,255,255,0.06)}
+.trust-badges{display:flex;align-items:center;justify-content:center;gap:32px;flex-wrap:wrap}
+.badge{display:flex;align-items:center;gap:8px;font-size:11px;font-weight:500;letter-spacing:0.07em;color:var(--text-dim)}
+.badge-icon{width:17px;height:17px;border-radius:50%;border:1px solid rgba(201,163,71,0.4);display:flex;align-items:center;justify-content:center;font-size:9px;flex-shrink:0}
+.badge-sep{width:1px;height:14px;background:rgba(255,255,255,0.1)}
+
+.section{padding:52px 60px}
+.section-title{text-align:center;font-family:'Bodoni Moda',serif;font-size:22px;font-weight:400;color:var(--cream);margin-bottom:10px}
+.section-divider{width:44px;height:1px;background:var(--gold);margin:0 auto 30px}
+.reseller-bar{max-width:960px;margin:0 auto 28px;border:1px solid rgba(201,163,71,0.2);padding:13px 20px;display:flex;align-items:center;justify-content:space-between;background:rgba(201,163,71,0.03)}
+.reseller-text{font-size:13px;color:var(--cream)}.reseller-text span{font-size:11px;color:var(--text-muted);display:block;margin-top:2px}
+.toggle{position:relative;width:42px;height:22px;cursor:pointer;flex-shrink:0}.toggle input{display:none}
+.toggle-track{width:100%;height:100%;background:rgba(255,255,255,0.1);border:1px solid rgba(201,163,71,0.3);border-radius:11px;transition:background .2s}
+.toggle input:checked+.toggle-track{background:var(--gold);border-color:var(--gold)}
+.toggle-thumb{position:absolute;top:3px;left:3px;width:14px;height:14px;background:var(--cream);border-radius:50%;transition:transform .2s;pointer-events:none}
+.toggle input:checked~.toggle-thumb{transform:translateX(20px)}
+.pricing-grid{display:grid;grid-template-columns:1fr 1.08fr 1fr;gap:14px;max-width:960px;margin:0 auto;align-items:start}
+.price-card{background:var(--cream);color:var(--dark);padding:30px 26px}
+.price-card.featured{background:var(--dark-3);color:var(--cream);border:1px solid rgba(201,163,71,0.35);overflow:hidden;position:relative}
+.featured-bg{position:absolute;inset:0;background-image:radial-gradient(ellipse at 80% 20%,rgba(201,163,71,0.1) 0%,transparent 55%),radial-gradient(ellipse at 20% 80%,rgba(30,80,180,0.06) 0%,transparent 45%);pointer-events:none}
+.price-card.featured .inner{position:relative;z-index:1}
+.card-label{font-size:8.5px;letter-spacing:0.3em;text-transform:uppercase;color:var(--gold);margin-bottom:9px;font-weight:600}
+.price-card:not(.featured) .card-label{color:#8a7040}
+.card-price{font-family:'Bodoni Moda',serif;font-size:36px;font-weight:700;margin-bottom:18px;line-height:1}
+.card-price span{font-size:13px;font-weight:300;opacity:0.5;font-family:'Raleway',sans-serif}
+.card-features{list-style:none;margin-bottom:24px;display:flex;flex-direction:column;gap:8px}
+.card-features li{display:flex;align-items:flex-start;gap:8px;font-size:12px;line-height:1.4}
+.price-card:not(.featured) .card-features li{color:#3d3020}
+.price-card.featured .card-features li{color:var(--text-dim)}
+.chk{width:14px;height:14px;border-radius:50%;border:1.5px solid var(--gold);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px}
+.chk::after{content:'';width:4px;height:2.5px;border-left:1.5px solid var(--gold);border-bottom:1.5px solid var(--gold);transform:rotate(-45deg) translate(0.5px,-0.5px);display:block}
+.card-btn{width:100%;font-family:'Raleway',sans-serif;font-size:9.5px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;padding:12px 18px;border:none;cursor:pointer;transition:all .2s}
+.btn-gold{background:var(--gold);color:var(--dark)}.btn-gold:hover{background:var(--gold-2)}
+.btn-dark{background:var(--dark);color:var(--cream);border:1px solid rgba(201,163,71,0.4)}.btn-dark:hover{border-color:var(--gold);color:var(--gold)}
+.btn-outline{background:transparent;color:#3d3020;border:1.5px solid #3d3020}.btn-outline:hover{background:var(--dark);color:var(--cream);border-color:var(--dark)}
+.packages-list{display:flex;flex-direction:column;gap:7px;margin-bottom:24px}
+.pkg-row{display:flex;align-items:center;justify-content:space-between;padding:9px 12px;background:rgba(201,163,71,0.06);border:1px solid rgba(201,163,71,0.15)}
+.pkg-name{font-size:12px;font-weight:500;color:#3d3020}.pkg-price{font-size:13px;font-weight:700;color:#3d3020}
+.enhancements-section{padding:44px 60px;background:rgba(255,255,255,0.02);border-top:1px solid rgba(255,255,255,0.06);border-bottom:1px solid rgba(255,255,255,0.06)}
+.enhancements-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:11px;max-width:960px;margin:0 auto}
+.enhance-card{border:1px solid rgba(201,163,71,0.2);padding:17px 14px;text-align:center;background:rgba(201,163,71,0.03);transition:border-color .2s,background .2s;cursor:pointer}
+.enhance-card:hover,.enhance-card.selected{border-color:rgba(201,163,71,0.6);background:rgba(201,163,71,0.08)}
+.enhance-icon{font-size:19px;margin-bottom:9px;display:block;opacity:0.8}
+.enhance-name{font-size:11px;font-weight:600;letter-spacing:0.04em;color:var(--cream);margin-bottom:4px;line-height:1.3}
+.enhance-desc{font-size:10px;color:var(--text-muted);line-height:1.5;margin-bottom:9px}
+.enhance-price{font-size:13px;font-weight:700;color:var(--gold)}
+.amplify-section{padding:52px 60px}
+.amplify-grid{display:grid;grid-template-columns:1fr 1fr;gap:22px;max-width:960px;margin:0 auto}
+.amplify-panel{border:1px solid rgba(201,163,71,0.2);padding:26px;background:rgba(255,255,255,0.02)}
+.amplify-panel-title{font-size:9px;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:5px}
+.amplify-panel-heading{font-family:'Bodoni Moda',serif;font-size:17px;font-weight:400;color:var(--cream);margin-bottom:18px;line-height:1.3}
+.amplify-rows{display:flex;flex-direction:column}
+.amplify-row{display:flex;align-items:center;justify-content:space-between;padding:11px 0;border-bottom:1px solid rgba(255,255,255,0.05);cursor:pointer}
+.amplify-row:last-child{border-bottom:none}
+.amplify-row-left{display:flex;align-items:center;gap:9px}
+.amplify-icon{font-size:13px;width:26px;height:26px;display:flex;align-items:center;justify-content:center;background:var(--gold-dim);flex-shrink:0}
+.amplify-name{font-size:12px;font-weight:500;color:var(--cream)}.amplify-sub{font-size:10px;color:var(--text-muted);margin-top:1px}
+.amplify-price{font-size:12.5px;font-weight:700;color:var(--gold);white-space:nowrap;padding:3px 8px;border:1px solid transparent;transition:all .15s}
+.amplify-price.selected{background:var(--gold);color:var(--dark)}
+.order-section{padding:0 60px 52px}
+.order-box{max-width:960px;margin:0 auto;border:1px solid rgba(201,163,71,0.25);background:rgba(255,255,255,0.02);padding:26px 30px}
+.order-box-title{font-family:'Bodoni Moda',serif;font-size:18px;font-weight:400;color:var(--cream);margin-bottom:4px}
+.order-box-sub{font-size:11px;color:var(--text-muted);margin-bottom:18px}
+.order-line{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(255,255,255,0.05);font-size:13px}
+.order-line:last-of-type{border-bottom:none}
+.order-line .label{color:var(--text-dim);font-weight:300}.order-line .value{color:var(--cream);font-weight:600}
+.order-empty{font-size:13px;color:var(--text-muted);padding:18px 0;text-align:center;font-style:italic}
+.order-footer-row{display:flex;justify-content:space-between;align-items:flex-end;padding-top:18px;margin-top:8px;border-top:1px solid rgba(201,163,71,0.2);gap:24px}
+.total-label{font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--text-muted);margin-bottom:4px}
+.total-amount{font-family:'Bodoni Moda',serif;font-size:34px;font-weight:700;color:var(--cream);line-height:1}
+.deposit-note{font-size:10px;color:var(--gold);margin-top:4px;letter-spacing:0.04em}
+.checkout-btn{font-family:'Raleway',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;padding:13px 32px;background:var(--gold);color:var(--dark);border:none;cursor:pointer;transition:background .2s;white-space:nowrap}
+.checkout-btn:hover{background:var(--gold-2)}.checkout-btn:disabled{background:rgba(201,163,71,0.15);color:rgba(255,255,255,0.2);cursor:not-allowed}
+.stripe-note{font-size:10px;color:var(--text-muted);margin-top:7px;text-align:center}
+.hiw-section{padding:52px 60px 60px;background:rgba(255,255,255,0.015);border-top:1px solid rgba(255,255,255,0.06)}
+.hiw-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;max-width:960px;margin:0 auto}
+.hiw-step{text-align:center;padding:0 6px}
+.hiw-num{font-family:'Bodoni Moda',serif;font-size:36px;font-weight:400;color:rgba(201,163,71,0.18);line-height:1;margin-bottom:12px}
+.hiw-title{font-size:11px;font-weight:700;letter-spacing:0.1em;color:var(--cream);margin-bottom:7px;text-transform:uppercase}
+.hiw-desc{font-size:11px;color:var(--text-muted);line-height:1.65;font-weight:300}
+.footer-cta{text-align:center;padding:48px 60px;border-top:1px solid rgba(201,163,71,0.12);background:rgba(201,163,71,0.03)}
+.footer-cta-text{font-family:'Bodoni Moda',serif;font-size:20px;font-weight:400;font-style:italic;color:var(--cream);margin-bottom:18px}
+.footer-cta-btn{font-family:'Raleway',sans-serif;font-size:10px;font-weight:700;letter-spacing:0.2em;text-transform:uppercase;padding:13px 38px;background:var(--gold);color:var(--dark);border:none;cursor:pointer;transition:background .2s;text-decoration:none;display:inline-block}
+.footer-cta-btn:hover{background:var(--gold-2)}
+footer{padding:18px 60px;border-top:1px solid rgba(201,163,71,0.1);display:flex;align-items:center;justify-content:space-between}
+.footer-brand{font-family:'Bodoni Moda',serif;font-size:13px;font-weight:700;letter-spacing:0.15em;text-transform:uppercase;color:var(--cream)}
+.footer-copy{font-size:10px;color:var(--text-muted);letter-spacing:0.08em}
+.footer-login{font-size:10px;letter-spacing:0.15em;text-transform:uppercase;color:var(--gold);font-weight:600;text-decoration:none}
+</style>
+</head>
+<body>
+<nav>
+  <div><div class="nav-wordmark">Resident</div><div class="nav-tagline">A Luxury Lifestyle Magazine</div></div>
+  <a href="#" class="nav-cta">Client Login</a>
+</nav>
+
+<!-- HERO V2 — NYC city aerial at night -->
+<div class="hero-wrap">
+  <div class="hero-bg"></div>
+  <div class="hero-gradient"></div>
+  <div class="hero-content">
+    <div class="hero-eyebrow">Editorial Placements</div>
+    <h1>Get Featured in<br><em>Resident Magazine</em></h1>
+    <p class="hero-sub">Reach an affluent audience of luxury consumers, investors, and tastemakers across print and digital channels.</p>
+    <div class="hero-actions">
+      <a href="#pricing" class="hero-btn-primary">Get Featured Today</a>
+      <a href="#pricing" class="hero-btn-outline">Explore Placements</a>
+    </div>
+  </div>
+</div>
+
+<div class="trust-section">
+  <div class="trust-badges">
+    <div class="badge"><div class="badge-icon">✦</div>SEO &amp; AI Optimized</div>
+    <div class="badge-sep"></div>
+    <div class="badge"><div class="badge-icon">◈</div>Premium Editorial Environments</div>
+    <div class="badge-sep"></div>
+    <div class="badge"><div class="badge-icon">◇</div>Long-Term Brand Authority</div>
+  </div>
+</div>
+
+<div id="pricing" class="section">
+  <div class="reseller-bar">
+    <div class="reseller-text">I'm a reseller / agency<span>Toggle on if you're purchasing on behalf of clients</span></div>
+    <label class="toggle"><input type="checkbox" id="rt" onchange="applyReseller(this.checked)"><div class="toggle-track"></div><div class="toggle-thumb"></div></label>
+  </div>
+  <div class="pricing-grid">
+    <div class="price-card">
+      <div class="card-label">Guest Editorial Placement</div>
+      <div class="card-price" id="p-guest">$450 <span>/ placement</span></div>
+      <ul class="card-features"><li><div class="chk"></div>Do-Follow Backlinks</li><li><div class="chk"></div>72-Hour Turnaround</li><li><div class="chk"></div>Resource Guide Feature</li><li><div class="chk"></div>You Write the Article</li><li><div class="chk"></div>Unique Submission Link</li></ul>
+      <button class="card-btn btn-gold" onclick="selectPkg('Guest Editorial',450)">Submit Placement</button>
+    </div>
+    <div class="price-card featured">
+      <div class="featured-bg"></div>
+      <div class="inner">
+        <div class="card-label">✦ Editorial Feature</div>
+        <div class="card-price" id="p-feature">$1,500 <span>/ placement</span></div>
+        <ul class="card-features"><li><div class="chk"></div>In-House Writing by Editors</li><li><div class="chk"></div>Homepage Feature Placement</li><li><div class="chk"></div>SEO &amp; AI Optimized</li><li><div class="chk"></div>Luxury Category Listing</li><li><div class="chk"></div>Editorial Strategy Included</li><li><div class="chk"></div>Priority Publication</li></ul>
+        <button class="card-btn btn-dark" onclick="selectPkg('Editorial Feature',1500)">Request Feature</button>
+      </div>
+    </div>
+    <div class="price-card">
+      <div class="card-label">Editorial Packages</div>
+      <div style="font-family:'Bodoni Moda',serif;font-size:18px;color:#3d3020;margin-bottom:14px">Bulk Pricing</div>
+      <div class="packages-list">
+        <div class="pkg-row"><span class="pkg-name">5 Articles</span><span class="pkg-price" id="p-5">$1,500</span></div>
+        <div class="pkg-row"><span class="pkg-name">10 Articles</span><span class="pkg-price" id="p-10">$2,500</span></div>
+      </div>
+      <button class="card-btn btn-outline" onclick="selectPkg('5-Article Package',1500)">Start Package</button>
+    </div>
+  </div>
+</div>
+
+<div class="enhancements-section">
+  <div class="section-title">Placement Enhancements</div><div class="section-divider"></div>
+  <div class="enhancements-grid">
+    <div class="enhance-card" onclick="toggleE(this,'Priority 24-Hour Publication',100)"><span class="enhance-icon">⚡</span><div class="enhance-name">Priority 24-Hour Publication</div><div class="enhance-desc">Jump the queue — guaranteed same-day processing</div><div class="enhance-price">+$100</div></div>
+    <div class="enhance-card" onclick="toggleE(this,'Premium Placement',150)"><span class="enhance-icon">⭑</span><div class="enhance-name">Premium Placement</div><div class="enhance-desc">Featured position within category landing page</div><div class="enhance-price">+$150</div></div>
+    <div class="enhance-card" onclick="toggleE(this,'CBD / Restricted Content',250)"><span class="enhance-icon">◈</span><div class="enhance-name">CBD / Restricted Content</div><div class="enhance-desc">Gray niche, CBD, gambling editorial placement</div><div class="enhance-price">+$250</div></div>
+    <div class="enhance-card" onclick="toggleE(this,'Post-Publication Revisions',75)"><span class="enhance-icon">✎</span><div class="enhance-name">Post-Publication Revisions</div><div class="enhance-desc">Edit your article after it's been published</div><div class="enhance-price">+$75</div></div>
+  </div>
+</div>
+
+<div class="amplify-section">
+  <div class="section-title">Amplification &amp; Distribution</div><div class="section-divider"></div>
+  <div class="amplify-grid">
+    <div class="amplify-panel">
+      <div class="amplify-panel-title">Social</div><div class="amplify-panel-heading">Resident Social Media</div>
+      <div class="amplify-rows">
+        <div class="amplify-row" onclick="toggleA(this,'Instagram Story',300)"><div class="amplify-row-left"><div class="amplify-icon">📸</div><div><div class="amplify-name">Instagram Story</div><div class="amplify-sub">Swipe-up story to Resident's audience</div></div></div><div class="amplify-price">+$300</div></div>
+        <div class="amplify-row" onclick="toggleA(this,'Feed Collaboration',600)"><div class="amplify-row-left"><div class="amplify-icon">🖼</div><div><div class="amplify-name">Feed Collaboration</div><div class="amplify-sub">Permanent feed post featuring your brand</div></div></div><div class="amplify-price">+$600</div></div>
+        <div class="amplify-row" onclick="toggleA(this,'Reel Feature',750)"><div class="amplify-row-left"><div class="amplify-icon">🎬</div><div><div class="amplify-name">Reel Feature</div><div class="amplify-sub">Short-form video content feature</div></div></div><div class="amplify-price">+$750</div></div>
+      </div>
+    </div>
+    <div class="amplify-panel">
+      <div class="amplify-panel-title">Extended Reach</div><div class="amplify-panel-heading">Print, Digital &amp; Email</div>
+      <div class="amplify-rows">
+        <div class="amplify-row" onclick="toggleA(this,'Digital Magazine Feature',1000)"><div class="amplify-row-left"><div class="amplify-icon">📖</div><div><div class="amplify-name">Digital Magazine Feature</div><div class="amplify-sub">Full spread in Resident's digital edition</div></div></div><div class="amplify-price">+$1,000</div></div>
+        <div class="amplify-row" onclick="toggleA(this,'Newsletter Promotion',950)"><div class="amplify-row-left"><div class="amplify-icon">✉️</div><div><div class="amplify-name">Newsletter Promotion</div><div class="amplify-sub">Dedicated send to subscriber list</div></div></div><div class="amplify-price">+$950</div></div>
+        <div class="amplify-row" onclick="toggleA(this,'30-Day Homepage Pin',200)"><div class="amplify-row-left"><div class="amplify-icon">📌</div><div><div class="amplify-name">30-Day Homepage Pin</div><div class="amplify-sub">Pinned top placement for 30 days</div></div></div><div class="amplify-price">+$200</div></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="order-section">
+  <div class="order-box">
+    <div class="order-box-title">Your Order</div><div class="order-box-sub">Selected items appear below</div>
+    <div id="cart-lines"><div class="order-empty">No items selected yet.</div></div>
+    <div class="order-footer-row">
+      <div><div class="total-label">Order Total</div><div id="cart-total" class="total-amount">$0</div><div id="dep-note" class="deposit-note" style="display:none"></div></div>
+      <div style="text-align:right"><button class="checkout-btn" id="co-btn" disabled>Proceed to Checkout</button><div class="stripe-note">🔒 Secured by Stripe</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="hiw-section">
+  <div class="section-title">How It Works</div><div class="section-divider"></div>
+  <div class="hiw-steps">
+    <div class="hiw-step"><div class="hiw-num">01</div><div class="hiw-title">Submit Your Content</div><div class="hiw-desc">Select your placement and upload your article through our secure submission portal.</div></div>
+    <div class="hiw-step"><div class="hiw-num">02</div><div class="hiw-title">Select Placement &amp; Add-Ons</div><div class="hiw-desc">Choose enhancements and amplification options to maximize your reach.</div></div>
+    <div class="hiw-step"><div class="hiw-num">03</div><div class="hiw-title">Complete Secure Payment</div><div class="hiw-desc">Pay your 50% deposit via Stripe to confirm your placement.</div></div>
+    <div class="hiw-step"><div class="hiw-num">04</div><div class="hiw-title">Published in 24–72 Hours</div><div class="hiw-desc">Your content goes live on Resident Magazine with a confirmation link.</div></div>
+  </div>
+</div>
+<div class="footer-cta"><div class="footer-cta-text">Ready to get your brand featured?</div><a href="#pricing" class="footer-cta-btn">Get Editorial Placement</a></div>
+<footer><div class="footer-brand">Resident</div><div class="footer-copy">© 2026 Resident Magazine. All rights reserved.</div><a href="#" class="footer-login">Client Login →</a></footer>
+<script>
+let pkg=null,pkgP=0,enhs={},adds={};
+function fmt(n){return'$'+n.toLocaleString()}
+function applyReseller(on){const d=on?.85:1,b={g:450,f:1500,p5:1500,p10:2500};document.getElementById('p-guest').innerHTML=fmt(Math.round(b.g*d))+' <span>/ placement</span>';document.getElementById('p-feature').innerHTML=fmt(Math.round(b.f*d))+' <span>/ placement</span>';document.getElementById('p-5').textContent=fmt(Math.round(b.p5*d));document.getElementById('p-10').textContent=fmt(Math.round(b.p10*d));const pb={'Guest Editorial':450,'Editorial Feature':1500,'5-Article Package':1500};if(pkg&&pb[pkg])pkgP=Math.round(pb[pkg]*d);render()}
+function selectPkg(n,p){const d=document.getElementById('rt').checked?.85:1;pkg=n;pkgP=Math.round(p*d);render()}
+function toggleE(el,n,p){el.classList.toggle('selected');if(el.classList.contains('selected'))enhs[n]=p;else delete enhs[n];render()}
+function toggleA(row,n,p){const el=row.querySelector('.amplify-price');if(adds[n]){delete adds[n];el.classList.remove('selected')}else{adds[n]=p;el.classList.add('selected')}render()}
+function render(){const cl=document.getElementById('cart-lines'),t=document.getElementById('cart-total'),dn=document.getElementById('dep-note'),btn=document.getElementById('co-btn');let h='',tot=0;if(pkg){h+=`<div class="order-line"><span class="label">${pkg}</span><span class="value">${fmt(pkgP)}</span></div>`;tot+=pkgP}for(const[n,p]of Object.entries(enhs)){h+=`<div class="order-line"><span class="label">${n}</span><span class="value">+${fmt(p)}</span></div>`;tot+=p}for(const[n,p]of Object.entries(adds)){h+=`<div class="order-line"><span class="label">${n}</span><span class="value">+${fmt(p)}</span></div>`;tot+=p}if(!h){cl.innerHTML='<div class="order-empty">No items selected yet.</div>';t.textContent='$0';dn.style.display='none';btn.disabled=true;return}cl.innerHTML=h;t.textContent=fmt(tot);dn.textContent='50% deposit due today: '+fmt(Math.round(tot/2));dn.style.display='block';btn.disabled=false}
+</script>
+</body>
+</html>
