@@ -24,8 +24,7 @@ body>*{position:relative;z-index:1}
 /* ── NAV ── */
 nav{display:flex;align-items:center;justify-content:space-between;padding:18px 60px;border-bottom:1px solid var(--border);position:absolute;top:0;left:0;right:0;z-index:100}
 .nav-brand{line-height:1;background:rgba(18,10,5,0.72);padding:10px 18px;border:1px solid rgba(232,224,211,0.12)}
-.nav-wordmark{font-family:'Bodoni Moda',serif;font-size:19px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,0.8)}
-.nav-tagline{font-size:8px;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold);margin-top:3px;font-weight:500;text-shadow:0 1px 4px rgba(0,0,0,0.9)}
+.nav-logo{height:36px;width:auto;display:block;filter:brightness(0) invert(1);opacity:0.92}
 .nav-cta{font-size:10px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--dark);background:var(--gold);padding:9px 22px;border:none;cursor:pointer;text-decoration:none;transition:background .2s;font-family:'Raleway',sans-serif}
 .nav-cta:hover{background:var(--gold-2)}
 
@@ -179,8 +178,7 @@ footer{padding:32px 60px;border-top:1px solid var(--border-soft);display:flex;al
 <!-- NAV -->
 <nav>
   <div class="nav-brand">
-    <div class="nav-wordmark">Resident</div>
-    <div class="nav-tagline">Est. 1988 · Luxury Editorial</div>
+    <img src="resident-logo.png" class="nav-logo" alt="Resident Magazine">
   </div>
   <a href="#order" class="nav-cta">Get Featured</a>
 </nav>
@@ -286,6 +284,43 @@ footer{padding:32px 60px;border-top:1px solid var(--border-soft);display:flex;al
           <div class="item-detail">Brand mention within an existing or new editorial listicle — great for awareness &amp; SEO link equity</div>
         </div>
         <div class="item-price" data-base="750">$750</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SPONSORED POST -->
+  <div class="section">
+    <div class="section-hd">
+      <div class="section-hd-left">
+        <div class="section-category">Sponsored Content</div>
+        <div class="section-title">Sponsored Post</div>
+        <div class="section-desc">You write the article. We publish it — marked as sponsored — on our homepage and luxury category. Subject to editorial approval; content must align with Resident's editorial guidelines, ethics, and standards.</div>
+      </div>
+    </div>
+    <div class="alacarte-list">
+      <div class="alacarte-item" onclick="toggleItem(this,'sponsored-post',1100)">
+        <div class="item-check"></div>
+        <div class="item-info">
+          <div class="item-name">Sponsored Post</div>
+          <div class="item-detail">Client-written article · Marked as sponsored · Published on homepage &amp; luxury category · Editorial approval required</div>
+        </div>
+        <div class="item-price" data-base="1100">$1,100</div>
+      </div>
+      <div class="alacarte-item" onclick="toggleItem(this,'sponsored-seo',300)">
+        <div class="item-check"></div>
+        <div class="item-info">
+          <div class="item-name">SEO &amp; AI Discoverability Optimization <span style="font-size:10px;font-weight:600;letter-spacing:0.08em;color:var(--gold);text-transform:uppercase;margin-left:8px">Add-on</span></div>
+          <div class="item-detail">Resident optimizes your article for search engines and AI discovery tools — structured data, meta, keyword alignment</div>
+        </div>
+        <div class="item-price" data-base="300">+$300</div>
+      </div>
+      <div class="alacarte-item" onclick="toggleItem(this,'sponsored-luxury',450)">
+        <div class="item-check"></div>
+        <div class="item-info">
+          <div class="item-name">Luxury Audience Optimization <span style="font-size:10px;font-weight:600;letter-spacing:0.08em;color:var(--gold);text-transform:uppercase;margin-left:8px">Add-on</span></div>
+          <div class="item-detail">Tone, language, and positioning refined for a high-net-worth luxury readership</div>
+        </div>
+        <div class="item-price" data-base="450">+$450</div>
       </div>
     </div>
   </div>
