@@ -23,9 +23,9 @@ body>*{position:relative;z-index:1}
 
 /* ── NAV ── */
 nav{display:flex;align-items:center;justify-content:space-between;padding:18px 60px;border-bottom:1px solid var(--border);position:absolute;top:0;left:0;right:0;z-index:100}
-.nav-brand{line-height:1}
-.nav-wordmark{font-family:'Bodoni Moda',serif;font-size:19px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:#fff}
-.nav-tagline{font-size:8px;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold);margin-top:3px;font-weight:500}
+.nav-brand{line-height:1;background:rgba(18,10,5,0.72);padding:10px 18px;border:1px solid rgba(232,224,211,0.12)}
+.nav-wordmark{font-family:'Bodoni Moda',serif;font-size:19px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;color:#fff;text-shadow:0 1px 6px rgba(0,0,0,0.8)}
+.nav-tagline{font-size:8px;letter-spacing:0.28em;text-transform:uppercase;color:var(--gold);margin-top:3px;font-weight:500;text-shadow:0 1px 4px rgba(0,0,0,0.9)}
 .nav-cta{font-size:10px;font-weight:700;letter-spacing:0.16em;text-transform:uppercase;color:var(--dark);background:var(--gold);padding:9px 22px;border:none;cursor:pointer;text-decoration:none;transition:background .2s;font-family:'Raleway',sans-serif}
 .nav-cta:hover{background:var(--gold-2)}
 
@@ -35,7 +35,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:18px 6
 .hero-photo{width:100%;height:100%;object-fit:cover;object-position:center 28%;display:block;filter:sepia(0.06) saturate(0.95) brightness(0.58)}
 .hero-gradient{position:absolute;inset:0;z-index:2;background:linear-gradient(to bottom,rgba(24,14,8,0.05) 0%,rgba(24,14,8,0.0) 18%,rgba(24,14,8,0.4) 58%,rgba(24,14,8,0.92) 80%,rgba(24,14,8,1) 100%)}
 .hero-content{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:90px 60px 40px;z-index:3}
-.hero-eyebrow{font-size:9px;letter-spacing:0.42em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;font-weight:600;text-shadow:0 1px 8px rgba(0,0,0,0.9),0 0 20px rgba(0,0,0,0.7)}
+.hero-eyebrow{font-size:9px;letter-spacing:0.42em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;font-weight:600;text-shadow:0 2px 4px rgba(0,0,0,1),0 0 16px rgba(0,0,0,1),0 0 40px rgba(0,0,0,0.9)}
 .hero h1{font-family:'Bodoni Moda',serif;font-size:clamp(32px,4.2vw,54px);font-weight:400;line-height:1.2;color:#fff;max-width:740px;margin-bottom:14px}
 .hero h1 em{font-style:italic;color:var(--gold)}
 .hero-sub{font-size:13px;color:rgba(255,255,255,0.5);max-width:500px;line-height:1.8;font-weight:300;margin-bottom:30px}
