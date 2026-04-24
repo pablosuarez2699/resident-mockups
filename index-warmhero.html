@@ -7,16 +7,16 @@
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
-  --dark:#e8e0d3;--dark-2:#ddd5c4;--dark-3:#d4c9b6;--dark-4:#c8bba6;
-  --cream:#2a150d;--gold:#8c5032;--gold-2:#a05d3a;--gold-dim:rgba(140,80,50,0.12);
-  --text-dim:rgba(42,21,13,0.6);--text-muted:rgba(42,21,13,0.38);
-  --border:rgba(140,80,50,0.2);--border-soft:rgba(140,80,50,0.1)
+  --dark:#180e08;--dark-2:#20110a;--dark-3:#28160d;--dark-4:#321c11;
+  --cream:#e8e0d3;--gold:#8c5032;--gold-2:#a05d3a;--gold-dim:rgba(140,80,50,0.15);
+  --text-dim:rgba(232,224,211,0.55);--text-muted:rgba(232,224,211,0.32);
+  --border:rgba(140,80,50,0.22);--border-soft:rgba(140,80,50,0.1)
 }
 html{scroll-behavior:smooth}
 body{font-family:'Raleway',sans-serif;background:var(--dark);color:var(--cream);-webkit-font-smoothing:antialiased;overflow-x:hidden}
 body::before{content:'';position:fixed;inset:0;pointer-events:none;z-index:0;
   background-image:
-    radial-gradient(ellipse at 20% 30%,rgba(111,63,37,0.07) 0%,transparent 50%),
+    radial-gradient(ellipse at 20% 30%,rgba(111,63,37,0.05) 0%,transparent 50%),
     radial-gradient(ellipse at 80% 70%,rgba(140,80,50,0.04) 0%,transparent 45%),
     repeating-linear-gradient(115deg,transparent 0px,transparent 130px,rgba(140,80,50,0.006) 130px,rgba(140,80,50,0.006) 131px)}
 body>*{position:relative;z-index:1}
@@ -33,7 +33,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:18px 6
 .hero-wrap{position:relative;height:620px;overflow:hidden}
 .hero-bg{position:absolute;inset:0;overflow:hidden;background:#180e08}
 .hero-photo{width:100%;height:100%;object-fit:cover;object-position:center 28%;display:block;filter:sepia(0.06) saturate(0.95) brightness(0.58)}
-.hero-gradient{position:absolute;inset:0;z-index:2;background:linear-gradient(to bottom,rgba(24,14,8,0.05) 0%,rgba(24,14,8,0.0) 18%,rgba(24,14,8,0.4) 58%,rgba(232,224,211,0.6) 88%,rgba(232,224,211,1) 100%)}
+.hero-gradient{position:absolute;inset:0;z-index:2;background:linear-gradient(to bottom,rgba(24,14,8,0.05) 0%,rgba(24,14,8,0.0) 18%,rgba(24,14,8,0.4) 58%,rgba(24,14,8,0.92) 80%,rgba(24,14,8,1) 100%)}
 .hero-content{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:90px 60px 40px;z-index:3}
 .hero-eyebrow{font-size:10px;letter-spacing:0.42em;text-transform:uppercase;color:#e8c99a;margin-bottom:20px;font-weight:700;text-shadow:0 2px 4px rgba(0,0,0,1),0 0 16px rgba(0,0,0,1),0 0 40px rgba(0,0,0,0.9)}
 .hero h1{font-family:'Bodoni Moda',serif;font-size:clamp(32px,4.2vw,54px);font-weight:400;line-height:1.2;color:#fff;max-width:740px;margin-bottom:14px}
@@ -47,16 +47,18 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:18px 6
 .hero-since{font-size:10px;letter-spacing:0.3em;text-transform:uppercase;color:rgba(140,80,50,0.6);font-weight:500}
 
 /* ── TRUST BAR ── */
-.trust-bar{padding:20px 60px;border-bottom:1px solid var(--border-soft);background:rgba(232,224,211,0.98)}
+.trust-bar{padding:20px 60px;border-bottom:1px solid var(--border-soft);background:rgba(24,14,8,0.95)}
 .trust-inner{display:flex;align-items:center;justify-content:center;gap:36px;flex-wrap:wrap}
-.trust-item{display:flex;align-items:center;gap:9px;font-size:11px;font-weight:600;letter-spacing:0.09em;color:#2a150d;text-shadow:none}
-.trust-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);opacity:1;flex-shrink:0;box-shadow:none}
-.trust-sep{width:1px;height:16px;background:rgba(42,21,13,0.15)}
+.trust-item{display:flex;align-items:center;gap:9px;font-size:11px;font-weight:600;letter-spacing:0.09em;color:#e8e0d3;text-shadow:0 0 14px rgba(140,80,50,0.3)}
+.trust-dot{width:6px;height:6px;border-radius:50%;background:var(--gold);opacity:1;flex-shrink:0;box-shadow:0 0 6px rgba(140,80,50,0.7)}
+.trust-sep{width:1px;height:16px;background:rgba(255,255,255,0.15)}
 
-
-
-
-
+/* ── PAGE TABS ── */
+.tabs-wrap{background:var(--dark-2);border-bottom:1px solid var(--border-soft);position:sticky;top:0;z-index:50}
+.tabs-inner{display:flex;max-width:1080px;margin:0 auto}
+.tab-btn{flex:1;max-width:240px;padding:16px 24px;font-size:10px;font-weight:600;letter-spacing:0.2em;text-transform:uppercase;background:none;border:none;cursor:pointer;color:var(--text-muted);border-bottom:2px solid transparent;transition:color .2s,border-color .2s;font-family:'Raleway',sans-serif;text-align:left}
+.tab-btn.active{color:var(--gold);border-bottom-color:var(--gold)}
+.tab-btn:hover:not(.active){color:var(--cream)}
 
 /* ── TAB PANELS ── */
 .tab-panel{display:none}.tab-panel.active{display:block}
@@ -160,7 +162,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:18px 6
 
 /* ── FOOTER ── */
 footer{padding:32px 60px;border-top:1px solid var(--border-soft);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px}
-.footer-brand{font-family:'Bodoni Moda',serif;font-size:13px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(42,21,13,0.4)}
+.footer-brand{font-family:'Bodoni Moda',serif;font-size:13px;letter-spacing:0.18em;text-transform:uppercase;color:rgba(255,255,255,0.4)}
 .footer-copy{font-size:10px;color:var(--text-muted);font-weight:300}
 
 @media(max-width:768px){
@@ -216,7 +218,18 @@ footer{padding:32px 60px;border-top:1px solid var(--border-soft);display:flex;al
   </div>
 </div>
 
-<!-- EDITORIAL FEATURES -->
+<!-- TABS -->
+<div class="tabs-wrap">
+  <div class="tabs-inner">
+    <button class="tab-btn active" onclick="switchTab('editorial',this)">Editorial Features</button>
+    <button class="tab-btn" onclick="switchTab('guestpost',this)">Guest Post</button>
+  </div>
+</div>
+
+<!-- ══════════════════════════════════════
+     TAB: EDITORIAL FEATURES
+═══════════════════════════════════════ -->
+<div id="tab-editorial" class="tab-panel active">
 <div class="page-body" id="build">
 
   <!-- PRESS RELEASE -->
@@ -246,43 +259,6 @@ footer{padding:32px 60px;border-top:1px solid var(--border-soft);display:flex;al
           <div class="item-detail">Full press release crafted by Resident's editorial team on your behalf</div>
         </div>
         <div class="item-price" data-base="200">+$200</div>
-      </div>
-    </div>
-  </div>
-
-  <!-- INTERVIEWS & FEATURES -->
-  <div class="section">
-    <div class="section-hd">
-      <div class="section-hd-left">
-        <div class="section-category">Interviews & Features</div>
-        <div class="section-title">Tell Your Story</div>
-        <div class="section-desc">Executive interviews and editorial features that position you as an authority. Permanently published, SEO optimized, and seen by an affluent audience across luxury markets.</div>
-      </div>
-    </div>
-    <div class="alacarte-list">
-      <div class="alacarte-item" onclick="toggleItem(this,'interview-leader',1500)">
-        <div class="item-check"></div>
-        <div class="item-info">
-          <div class="item-name">Business Leader Interview</div>
-          <div class="item-detail">In-depth editorial interview — great for founders, executives & business leaders · See: <a href="https://resident.com/interviews/business-leader" target="_blank" style="color:var(--gold);text-decoration:none">resident.com/interviews</a></div>
-        </div>
-        <div class="item-price" data-base="1500">$1,500</div>
-      </div>
-      <div class="alacarte-item" onclick="toggleItem(this,'listicle-feature',950)">
-        <div class="item-check"></div>
-        <div class="item-info">
-          <div class="item-name">Featured Listicle</div>
-          <div class="item-detail">Your product or brand as a featured entry in an editorial listicle — great for product launches & e-commerce brands</div>
-        </div>
-        <div class="item-price" data-base="950">$950</div>
-      </div>
-      <div class="alacarte-item" onclick="toggleItem(this,'listicle-inclusion',750)">
-        <div class="item-check"></div>
-        <div class="item-info">
-          <div class="item-name">Listicle Inclusion</div>
-          <div class="item-detail">Brand mention within an existing or new editorial listicle — great for awareness & SEO link equity</div>
-        </div>
-        <div class="item-price" data-base="750">$750</div>
       </div>
     </div>
   </div>
@@ -722,10 +698,101 @@ footer{padding:32px 60px;border-top:1px solid var(--border-soft);display:flex;al
   <button class="order-cta" id="orderCta" onclick="submitOrder()">Request This Campaign</button>
 </div>
 
+</div><!-- /tab-editorial -->
 
 
+<!-- ══════════════════════════════════════
+     TAB: GUEST POST
+═══════════════════════════════════════ -->
+<div id="tab-guestpost" class="tab-panel">
+<div class="page-body" style="padding-top:40px;padding-bottom:80px">
 
+  <!-- RESELLER TOGGLE -->
+  <div style="padding-bottom:28px">
+    <div class="reseller-bar">
+      <div class="reseller-label">
+        Reseller / Agency Pricing
+        <span>Check this if you represent a brand or agency — qualifying accounts receive preferred rates.</span>
+      </div>
+      <label class="toggle">
+        <input type="checkbox" id="resellerToggle" onchange="applyReseller(this.checked)">
+        <div class="toggle-track"></div>
+        <div class="toggle-thumb"></div>
+      </label>
+    </div>
+  </div>
 
+  <div class="gp-hero">
+    <div class="gp-hero-left">
+      <div class="gp-hero-tag">Resource Guide Placement</div>
+      <div class="gp-hero-title">Guest Post</div>
+      <div class="gp-hero-sub">You write the article — we publish it in our curated Resource Guide. A straightforward, affordable way to get your brand in front of Resident's audience with a permanent do-follow link.</div>
+      <div class="gp-includes">
+        <div class="gp-includes-title">What's Included</div>
+        <div class="gp-includes-list">
+          <div class="gp-inc-item">Published in Resource Guide</div>
+          <div class="gp-inc-item">1 Do-Follow Link</div>
+          <div class="gp-inc-item">Standard turnaround</div>
+          <div class="gp-inc-item">Priority option available</div>
+        </div>
+      </div>
+    </div>
+    <div class="gp-price-block">
+      <div class="gp-price">$450</div>
+      <div class="gp-price-label">Per guest post</div>
+    </div>
+  </div>
+
+  <!-- Guest Post Enhancements Only -->
+  <div style="margin-bottom:10px">
+    <div class="section-category" style="margin-bottom:8px">Enhancements</div>
+    <div class="section-title" style="font-family:'Bodoni Moda',serif;font-size:20px;font-weight:400;color:var(--cream);margin-bottom:16px">Optional Add-Ons</div>
+  </div>
+  <div class="alacarte-list">
+    <div class="alacarte-item" onclick="toggleItem(this,'gp-priority',0)" data-pricedisplay="Ask">
+      <div class="item-check"></div>
+      <div class="item-info">
+        <div class="item-name">Priority Publication — 24-Hour Turnaround</div>
+        <div class="item-detail">Expedited review and same-day or next-day publication</div>
+      </div>
+      <div class="item-price" data-base="0" style="font-family:'Raleway',sans-serif;font-size:11px;letter-spacing:0.08em;color:var(--text-dim)">Inquire</div>
+    </div>
+    <div class="alacarte-item" onclick="toggleItem(this,'gp-cpd',0)" data-pricedisplay="Ask">
+      <div class="item-check"></div>
+      <div class="item-info">
+        <div class="item-name">CPD / Continuing Education Credit</div>
+        <div class="item-detail">For eligible professional content — contact us for qualification details</div>
+      </div>
+      <div class="item-price" data-base="0" style="font-family:'Raleway',sans-serif;font-size:11px;letter-spacing:0.08em;color:var(--text-dim)">Inquire</div>
+    </div>
+    <div class="alacarte-item" onclick="toggleItem(this,'gp-premium-placement',0)" data-pricedisplay="Ask">
+      <div class="item-check"></div>
+      <div class="item-info">
+        <div class="item-name">Premium Placement</div>
+        <div class="item-detail">Featured position within the Resource Guide for increased visibility</div>
+      </div>
+      <div class="item-price" data-base="0" style="font-family:'Raleway',sans-serif;font-size:11px;letter-spacing:0.08em;color:var(--text-dim)">Inquire</div>
+    </div>
+  </div>
+
+  <div style="margin-top:32px;padding:20px 24px;background:var(--dark-2);display:flex;align-items:center;gap:14px">
+    <div style="font-size:18px;color:var(--gold)">✦</div>
+    <div>
+      <div style="font-size:11px;font-weight:600;color:var(--cream);letter-spacing:0.06em;margin-bottom:4px">Looking for a full editorial feature?</div>
+      <div style="font-size:11px;color:var(--text-dim);font-weight:300">Our Editorial Features tab offers fully written articles, distribution, and full brand elevation campaigns — starting at $1,500.</div>
+    </div>
+    <button onclick="switchTab('editorial',document.querySelector('.tab-btn'))" style="margin-left:auto;font-size:9px;font-weight:700;letter-spacing:0.18em;text-transform:uppercase;padding:10px 20px;background:var(--gold);color:var(--dark);border:none;cursor:pointer;white-space:nowrap;font-family:'Raleway',sans-serif">View Features</button>
+  </div>
+
+  <!-- Guest post submission note -->
+  <div style="margin-top:32px;padding:24px;border:1px solid var(--border-soft)">
+    <div class="section-category" style="margin-bottom:8px">Ready to Submit?</div>
+    <div style="font-size:13px;color:var(--text-dim);line-height:1.8;font-weight:300;margin-bottom:16px">Complete your order and you'll receive a secure submission link to upload your article, images, and details directly to our editorial team. We handle up to 20 submissions per day — your submission token ensures only one article per order.</div>
+    <a href="#" class="hero-btn-primary" style="display:inline-block;font-size:10px">Order Guest Post — $450</a>
+  </div>
+
+</div>
+</div><!-- /tab-guestpost -->
 
 <!-- FOOTER -->
 <footer>
