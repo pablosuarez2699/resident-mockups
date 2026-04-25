@@ -30,7 +30,7 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:18px 6
 
 /* ── HERO ── */
 .hero-wrap{position:relative;height:620px;overflow:hidden}
-.hero-bg{position:absolute;inset:0;background:url('https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=1920&q=80') center 65%/cover no-repeat}
+.hero-bg{position:absolute;inset:0;background:url('hero-yacht.jpg') center center/cover no-repeat}
 .hero-gradient{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(15,18,24,0.55) 0%,rgba(15,18,24,0.28) 20%,rgba(15,18,24,0.52) 50%,rgba(15,18,24,0.9) 78%,rgba(15,18,24,1) 100%)}
 .hero-content{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:90px 60px 40px;z-index:2}
 .hero-eyebrow{font-size:9px;letter-spacing:0.42em;text-transform:uppercase;color:var(--gold);margin-bottom:20px;font-weight:600}
@@ -281,6 +281,43 @@ footer{padding:32px 60px;border-top:1px solid var(--border-soft);display:flex;al
           <div class="item-detail">Brand mention within an existing or new editorial listicle — great for awareness &amp; SEO link equity</div>
         </div>
         <div class="item-price" data-base="750">$750</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- SPONSORED POST -->
+  <div class="section">
+    <div class="section-hd">
+      <div class="section-hd-left">
+        <div class="section-category">Sponsored Content</div>
+        <div class="section-title">Sponsored Post</div>
+        <div class="section-desc">You write the article. We publish it — marked as sponsored — on our homepage and luxury category. Subject to editorial approval; content must align with Resident's editorial guidelines, ethics, and standards.</div>
+      </div>
+    </div>
+    <div class="alacarte-list">
+      <div class="alacarte-item" onclick="toggleItem(this,'sponsored-post',1100)">
+        <div class="item-check"></div>
+        <div class="item-info">
+          <div class="item-name">Sponsored Post</div>
+          <div class="item-detail">Client-written article · Marked as sponsored · Published on homepage &amp; luxury category · Editorial approval required</div>
+        </div>
+        <div class="item-price" data-base="1100">$1,100</div>
+      </div>
+      <div class="alacarte-item" onclick="toggleItem(this,'sponsored-seo',300)">
+        <div class="item-check"></div>
+        <div class="item-info">
+          <div class="item-name">SEO &amp; AI Discoverability Optimization <span style="font-size:10px;font-weight:600;letter-spacing:0.08em;color:var(--gold);text-transform:uppercase;margin-left:8px">Add-on</span></div>
+          <div class="item-detail">Resident optimizes your article for search engines and AI discovery tools — structured data, meta, keyword alignment</div>
+        </div>
+        <div class="item-price" data-base="300">+$300</div>
+      </div>
+      <div class="alacarte-item" onclick="toggleItem(this,'sponsored-luxury',450)">
+        <div class="item-check"></div>
+        <div class="item-info">
+          <div class="item-name">Luxury Audience Optimization <span style="font-size:10px;font-weight:600;letter-spacing:0.08em;color:var(--gold);text-transform:uppercase;margin-left:8px">Add-on</span></div>
+          <div class="item-detail">Tone, language, and positioning refined for a high-net-worth luxury readership</div>
+        </div>
+        <div class="item-price" data-base="450">+$450</div>
       </div>
     </div>
   </div>
