@@ -170,9 +170,34 @@ footer{padding:32px 60px;border-top:1px solid var(--border-soft);display:flex;al
   .order-summary{padding:16px 24px}
   footer{padding:24px}
 }
+/* ── NEWSLETTER GATE ── */
+.gate-overlay{position:fixed;inset:0;z-index:9999;display:flex;align-items:center;justify-content:center;background:rgba(10,12,16,0.96);backdrop-filter:blur(6px)}
+.gate-overlay.hidden{display:none}
+.gate-box{width:100%;max-width:560px;padding:52px 48px;background:var(--dark-2);position:relative;text-align:center}
+.gate-eyebrow{font-size:9px;letter-spacing:0.42em;text-transform:uppercase;color:var(--gold);font-weight:600;margin-bottom:18px}
+.gate-title{font-family:'Bodoni Moda',serif;font-size:28px;font-weight:400;color:var(--cream);line-height:1.25;margin-bottom:12px}
+.gate-sub{font-size:12px;color:var(--text-dim);line-height:1.8;margin-bottom:32px;font-weight:300}
+.gate-divider{width:40px;height:1px;background:var(--gold);opacity:0.4;margin:0 auto 28px}
+.gate-frame{width:100%;border:none;height:220px;background:transparent}
+.gate-skip{margin-top:20px;font-size:10px;color:var(--text-muted);cursor:pointer;letter-spacing:0.08em;text-decoration:underline;display:block;font-weight:300}
+.gate-skip:hover{color:var(--text-dim)}
 </style>
 </head>
 <body>
+
+<!-- NEWSLETTER GATE -->
+<div class="gate-overlay" id="gateOverlay">
+  <div class="gate-box">
+    <div class="gate-eyebrow">Exclusive Access</div>
+    <div class="gate-title">Join the Resident Insider List</div>
+    <div class="gate-sub">Subscribe to our newsletter to unlock our advertising rates and brand partnership opportunities.</div>
+    <div class="gate-divider"></div>
+    <iframe class="gate-frame" id="gateFrame"
+      src="https://share.hsforms.com/1lxXwkwzuT9CHSlphfz0wtQpzrk7"
+      scrolling="no"></iframe>
+    <span class="gate-skip" onclick="unlockPage()">Already subscribed? Skip →</span>
+  </div>
+</div>
 
 <!-- NAV -->
 <nav>
@@ -864,6 +889,27 @@ function submitOrder() {
   const total = items.reduce((s, i) => s + (i.price || 0), 0);
   alert('Thank you! A member of the Resident Magazine team will be in touch within 24 hours to confirm your campaign details.\n\nSelected: ' + items.map(i => i.name).join(', ') + '\nTotal: $' + total.toLocaleString());
 }
+</script>
+<script>
+// Newsletter gate
+function unlockPage() {
+  localStorage.setItem('rm_subscribed', '1');
+  var overlay = document.getElementById('gateOverlay');
+  overlay.style.opacity = '0';
+  overlay.style.transition = 'opacity 0.4s ease';
+  setTimeout(function(){ overlay.classList.add('hidden'); }, 400);
+}
+// Check if already subscribed
+if (localStorage.getItem('rm_subscribed')) {
+  document.getElementById('gateOverlay').classList.add('hidden');
+}
+// Listen for HubSpot form submission
+window.addEventListener('message', function(e) {
+  if (e.data && (
+    (e.data.type === 'hsFormCallback' && e.data.eventName === 'onFormSubmitted') ||
+    (typeof e.data === 'string' && e.data.includes('FormSubmitted'))
+  )) { unlockPage(); }
+});
 </script>
 </body>
 </html>
