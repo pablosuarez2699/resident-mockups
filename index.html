@@ -32,8 +32,10 @@ nav{display:flex;align-items:center;justify-content:space-between;padding:18px 6
 .hero-wrap{position:relative;height:620px;overflow:hidden}
 .hero-bg{position:absolute;inset:0;background:url('hero-yacht.jpg') center 25%/cover no-repeat}
 .hero-gradient{position:absolute;inset:0;background:linear-gradient(to bottom,rgba(15,18,24,0.55) 0%,rgba(15,18,24,0.28) 20%,rgba(15,18,24,0.52) 50%,rgba(15,18,24,0.9) 78%,rgba(15,18,24,1) 100%)}
-.hero-content{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:90px 60px 40px;z-index:2}
-.hero-eyebrow{font-size:9px;letter-spacing:0.42em;text-transform:uppercase;color:var(--gold);margin-bottom:72px;font-weight:600;text-shadow:0 0 8px rgba(201,163,71,0.8),0 0 20px rgba(201,163,71,0.55),0 0 45px rgba(201,163,71,0.3)}
+.hero-content{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:space-between;text-align:center;padding:120px 60px 60px;z-index:2}
+.hero-top{display:flex;flex-direction:column;align-items:center}
+.hero-bottom{display:flex;flex-direction:column;align-items:center;gap:0}
+.hero-eyebrow{font-size:9px;letter-spacing:0.42em;text-transform:uppercase;color:var(--gold);margin-bottom:16px;font-weight:600;text-shadow:0 0 8px rgba(201,163,71,0.8),0 0 20px rgba(201,163,71,0.55),0 0 45px rgba(201,163,71,0.3)}
 .hero h1{font-family:'Bodoni Moda',serif;font-size:clamp(32px,4.2vw,54px);font-weight:400;line-height:1.2;color:#fff;max-width:740px;margin-bottom:14px}
 .hero h1 em{font-style:italic;color:var(--gold)}
 .hero-sub{font-size:13px;color:rgba(255,255,255,0.9);max-width:500px;line-height:1.8;font-weight:500;margin-bottom:30px;text-shadow:0 1px 8px rgba(0,0,0,0.9),0 0 24px rgba(0,0,0,0.8)}
@@ -212,14 +214,18 @@ footer{padding:32px 60px;border-top:1px solid var(--border-soft);display:flex;al
   <div class="hero-bg"></div>
   <div class="hero-gradient"></div>
   <div class="hero-content">
-    <div class="hero-eyebrow">Luxury Editorial · Affluent Audience · Long-Term Authority</div>
-    <h1>Elevate Your Brand with <em>Resident Magazine</em></h1>
-    <p class="hero-sub">Build credibility, reach an affluent audience, and establish long-term brand authority — across Resident's global luxury audience.</p>
-    <div class="hero-actions">
-      <a href="#build" class="hero-btn-primary">Build Your Campaign</a>
-      <a href="#why" class="hero-btn-outline">Why Resident</a>
+    <div class="hero-top">
+      <div class="hero-eyebrow">Luxury Editorial · Affluent Audience · Long-Term Authority</div>
+      <h1>Elevate Your Brand with <em>Resident Magazine</em></h1>
     </div>
-    <div class="hero-since">Publishing Since 1988</div>
+    <div class="hero-bottom">
+      <p class="hero-sub">Build credibility, reach an affluent audience, and establish long-term brand authority — across Resident's global luxury audience.</p>
+      <div class="hero-actions">
+        <a href="#build" class="hero-btn-primary">Build Your Campaign</a>
+        <a href="#why" class="hero-btn-outline">Why Resident</a>
+      </div>
+      <div class="hero-since">Publishing Since 1988</div>
+    </div>
   </div>
 </div>
 
