@@ -28,16 +28,12 @@ def _post(endpoint: str, payload: dict) -> dict:
     return resp.json()
 
 
-@retry(
-    stop=stop_after_attempt(4),
-    wait=wait_exponential(multiplier=2, min=2, max=30),
-    retry=retry_if_exception_type(requests.RequestException),
-    reraise=True,
-)
 def _get(endpoint: str, params: dict) -> dict:
     _limiter.wait()
     url = f"{config.APOLLO_BASE_URL}{endpoint}"
     resp = requests.get(url, params=params, headers=_headers(), timeout=30)
+    if not resp.ok:
+        log.error("Apollo %s %s — body: %s", endpoint, resp.status_code, resp.text[:500])
     resp.raise_for_status()
     return resp.json()
 
@@ -129,19 +125,21 @@ def get_organization_top_people(
 ) -> List[Dict[str, Any]]:
     """Return the top contacts at a given Apollo organization.
 
-    Apollo surfaces the most senior / high-signal people first, so a small
-    per_page (5-10) is usually enough to find the right decision-maker.
+    Uses GET with query-string params — POST returns 404 and the endpoint
+    crashes Rails pagination without explicit page/per_page values.
     """
     if not organization_id:
         return []
-    payload: dict = {
+    params: dict = {
         "organization_id": organization_id,
+        "page": 1,
         "per_page": per_page,
     }
     if titles:
-        payload["person_titles"] = titles
+        # Apollo accepts repeated query keys for arrays
+        params["person_titles[]"] = titles
     try:
-        result = _post("/mixed_people/organization_top_people", payload)
+        result = _get("/mixed_people/organization_top_people", params)
         return result.get("people", []) or result.get("contacts", [])
     except Exception as e:
         log.warning("Apollo top_people failed for org %s: %s", organization_id, e)
