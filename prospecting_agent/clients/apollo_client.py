@@ -18,16 +18,12 @@ def _headers() -> dict:
     }
 
 
-@retry(
-    stop=stop_after_attempt(4),
-    wait=wait_exponential(multiplier=2, min=2, max=30),
-    retry=retry_if_exception_type(requests.RequestException),
-    reraise=True,
-)
 def _post(endpoint: str, payload: dict) -> dict:
     _limiter.wait()
     url = f"{config.APOLLO_BASE_URL}{endpoint}"
     resp = requests.post(url, json=payload, headers=_headers(), timeout=30)
+    if not resp.ok:
+        log.error("Apollo %s %s — body: %s", endpoint, resp.status_code, resp.text[:800])
     resp.raise_for_status()
     return resp.json()
 
@@ -62,18 +58,24 @@ def search_people(
     page: int = 1,
     per_page: int = 25,
 ) -> Dict[str, Any]:
+    # Use keyword search (q_keywords) for industry + topic terms.
+    # Apollo's organization_industry_tag_values requires opaque tag IDs we
+    # don't have; q_keywords is the forgiving alternative that searches
+    # across company name, description, and industry text.
+    keyword_terms = [t for t in (industries + keywords) if t]
+    q_keywords = " ".join(keyword_terms[:8])
+
     payload = {
         "page": page,
         "per_page": per_page,
         "person_titles": titles,
+        "person_locations": ["Canada"],
         "organization_locations": ["Canada"],
-        "organization_industry_tag_values": industries,
-        "q_keywords": " OR ".join(keywords) if keywords else "",
-        "organization_num_employees_ranges": ["10,50", "51,200", "201,500"],
-        "contact_email_status": ["verified", "likely to engage", "guessed"],
+        "q_keywords": q_keywords,
+        "organization_num_employees_ranges": ["11,50", "51,200", "201,500"],
     }
     try:
-        return _post("/people/search", payload)
+        return _post("/mixed_people/search", payload)
     except Exception as e:
         log.error("Apollo people/search failed (page %d): %s", page, e)
         return {}
