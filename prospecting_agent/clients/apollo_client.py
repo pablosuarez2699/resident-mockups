@@ -90,3 +90,59 @@ def enrich_organization(domain: str) -> Optional[Dict[str, Any]]:
     except Exception as e:
         log.warning("Apollo org enrich failed for %s: %s", domain, e)
         return None
+
+
+def search_organizations(
+    industries: List[str],
+    keywords: List[str],
+    page: int = 1,
+    per_page: int = 25,
+) -> Dict[str, Any]:
+    """Search Apollo's organization database for companies matching filters.
+
+    Used as the entry point for prospecting on plans where mixed_people/search
+    is not accessible. Returns a list of organizations; combine with
+    get_organization_top_people() to surface decision-makers per org.
+    """
+    keyword_terms = [t for t in (industries + keywords) if t]
+    q_keywords = " ".join(keyword_terms[:8])
+
+    payload = {
+        "page": page,
+        "per_page": per_page,
+        "organization_locations": ["Canada"],
+        "q_organization_keyword_tags": keyword_terms[:8],
+        "q_keywords": q_keywords,
+        "organization_num_employees_ranges": ["11,50", "51,200", "201,500"],
+    }
+    try:
+        return _post("/organizations/search", payload)
+    except Exception as e:
+        log.error("Apollo organizations/search failed (page %d): %s", page, e)
+        return {}
+
+
+def get_organization_top_people(
+    organization_id: str,
+    titles: Optional[List[str]] = None,
+    per_page: int = 10,
+) -> List[Dict[str, Any]]:
+    """Return the top contacts at a given Apollo organization.
+
+    Apollo surfaces the most senior / high-signal people first, so a small
+    per_page (5-10) is usually enough to find the right decision-maker.
+    """
+    if not organization_id:
+        return []
+    payload: dict = {
+        "organization_id": organization_id,
+        "per_page": per_page,
+    }
+    if titles:
+        payload["person_titles"] = titles
+    try:
+        result = _post("/mixed_people/organization_top_people", payload)
+        return result.get("people", []) or result.get("contacts", [])
+    except Exception as e:
+        log.warning("Apollo top_people failed for org %s: %s", organization_id, e)
+        return []
