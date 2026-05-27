@@ -16,6 +16,10 @@ HUNTER_API_KEY: str = os.getenv("HUNTER_API_KEY", "")
 ANTHROPIC_API_KEY: str = os.getenv("ANTHROPIC_API_KEY", "")
 CLAUDE_MODEL: str = os.getenv("CLAUDE_MODEL", "claude-sonnet-4-6")
 
+# "free"  → org-search only, no person data (lookup-assist mode)
+# "paid"  → mixed_people/search with emails + direct dials
+APOLLO_PLAN: str = os.getenv("APOLLO_PLAN", "free")
+
 TARGET_LEADS: int = int(os.getenv("TARGET_LEADS", "100"))
 HUNTER_BUDGET_PER_RUN: int = int(os.getenv("HUNTER_BUDGET_PER_RUN", "50"))
 APOLLO_PAGES_PER_SECTOR: int = int(os.getenv("APOLLO_PAGES_PER_SECTOR", "5"))

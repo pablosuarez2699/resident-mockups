@@ -43,6 +43,10 @@ def run(
         console.print(f"[red]No valid sectors specified. Choose from: {list(SECTOR_CONFIGS.keys())}[/red]")
         return None
 
+    plan_label = "[green]PAID — emails + phones enabled[/green]" if config.APOLLO_PLAN == "paid" \
+        else "[yellow]FREE — lookup-assist mode (company data only)[/yellow]"
+    console.print(f"[bold]Apollo plan:[/bold] {plan_label}")
+
     if dry_run:
         console.print("[yellow]Dry run: validating API connectivity...[/yellow]")
         from clients.apollo_client import health_check
@@ -93,13 +97,16 @@ def run(
     console.print(f"[bold]Sending {len(claude_pool)} leads to Claude for qualification...[/bold]")
     claude_pool = qualify_leads_batch(claude_pool)
 
-    # Hunter email enrichment — only runs when person data is present
-    has_people = any(l.first_name for l in claude_pool)
-    if has_people and config.HUNTER_API_KEY and hunter_budget > 0:
-        console.print(f"[bold]Running Hunter email enrichment (budget: {hunter_budget})...[/bold]")
+    # Hunter email enrichment — fills gaps for paid-plan contacts missing an email
+    if config.APOLLO_PLAN == "paid" and config.HUNTER_API_KEY and hunter_budget > 0:
+        missing_email = sum(1 for l in claude_pool if not l.email)
+        console.print(
+            f"[bold]Hunter email enrichment:[/bold] {missing_email} contacts without email "
+            f"(budget: {hunter_budget})"
+        )
         claude_pool = enrich_emails(claude_pool, hunter_budget)
-    elif not has_people:
-        console.print("[yellow]Lookup-assist mode: skipping Hunter (no person data yet)[/yellow]")
+    elif config.APOLLO_PLAN == "free":
+        console.print("[yellow]Lookup-assist mode — Hunter skipped (no contacts yet)[/yellow]")
 
     # Final sort by shipping score, take top N
     final_leads = sorted(claude_pool, key=lambda l: l.shipping_score, reverse=True)[:target_leads]
