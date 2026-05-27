@@ -21,7 +21,8 @@ def _headers() -> dict:
 def _post(endpoint: str, payload: dict) -> dict:
     _limiter.wait()
     url = f"{config.APOLLO_BASE_URL}{endpoint}"
-    resp = requests.post(url, json=payload, headers=_headers(), timeout=30)
+    body = {"api_key": config.APOLLO_API_KEY, **payload}
+    resp = requests.post(url, json=body, headers=_headers(), timeout=30)
     if not resp.ok:
         log.error("Apollo %s %s — body: %s", endpoint, resp.status_code, resp.text[:800])
     resp.raise_for_status()
