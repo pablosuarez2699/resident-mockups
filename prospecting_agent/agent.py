@@ -93,10 +93,13 @@ def run(
     console.print(f"[bold]Sending {len(claude_pool)} leads to Claude for qualification...[/bold]")
     claude_pool = qualify_leads_batch(claude_pool)
 
-    # Hunter email enrichment on remaining candidates
-    if config.HUNTER_API_KEY and hunter_budget > 0:
+    # Hunter email enrichment — only runs when person data is present
+    has_people = any(l.first_name for l in claude_pool)
+    if has_people and config.HUNTER_API_KEY and hunter_budget > 0:
         console.print(f"[bold]Running Hunter email enrichment (budget: {hunter_budget})...[/bold]")
         claude_pool = enrich_emails(claude_pool, hunter_budget)
+    elif not has_people:
+        console.print("[yellow]Lookup-assist mode: skipping Hunter (no person data yet)[/yellow]")
 
     # Final sort by shipping score, take top N
     final_leads = sorted(claude_pool, key=lambda l: l.shipping_score, reverse=True)[:target_leads]

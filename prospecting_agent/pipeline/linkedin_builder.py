@@ -2,32 +2,35 @@ import urllib.parse
 from models.lead import Lead
 
 
-def _slug_from_url(linkedin_url: str) -> str:
+def _company_linkedin_slug(linkedin_url: str) -> str:
     if not linkedin_url:
         return ""
-    # Extract /in/slug or /company/slug
     parts = linkedin_url.rstrip("/").split("/")
-    if len(parts) >= 2:
+    if len(parts) >= 2 and "company" in linkedin_url:
         return parts[-1]
     return ""
 
 
 def build_urls(lead: Lead) -> Lead:
-    name_query = urllib.parse.quote_plus(lead.full_name)
     company_query = urllib.parse.quote_plus(lead.company_name)
 
-    slug = _slug_from_url(lead.linkedin_url)
-    if slug and "/in/" in (lead.linkedin_url or ""):
-        lead.sales_nav_url = f"https://www.linkedin.com/sales/people/{slug},NAME_SEARCH"
+    # Company Sales Nav URL — direct to the company page if we have a slug,
+    # otherwise a company keyword search
+    slug = _company_linkedin_slug(lead.linkedin_url)
+    if slug:
+        lead.sales_nav_company_url = f"https://www.linkedin.com/sales/company/{slug}"
     else:
-        lead.sales_nav_url = (
-            f"https://www.linkedin.com/sales/search/people"
-            f"?query=(keywords:{name_query},filters:List((type:CURRENT_COMPANY,values:List((text:{company_query})))))"
+        lead.sales_nav_company_url = (
+            f"https://www.linkedin.com/sales/search/company"
+            f"?query=(keywords:{company_query})"
         )
 
-    lead.sales_nav_company_url = (
-        f"https://www.linkedin.com/sales/search/company"
-        f"?query=(keywords:{company_query})"
+    # Person Sales Nav URL — search for decision-maker titles at this company
+    # Rep clicks this to find the right contact manually
+    lead.sales_nav_url = (
+        f"https://www.linkedin.com/sales/search/people"
+        f"?query=(keywords:{company_query},"
+        f"filters:List((type:CURRENT_COMPANY,values:List((text:{company_query})))))"
     )
 
     return lead
