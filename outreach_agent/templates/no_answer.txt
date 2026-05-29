@@ -1,0 +1,9 @@
+Hi {greeting_name},
+
+I tried reaching you by phone today at {company_name} and couldn't connect, so I wanted to introduce myself. I'm {rep_name}, {rep_title}.
+
+{relationship_line}{carrier_line}I work with Canadian businesses to make sure their shipping is reliable, cost-predictable, and well supported right across the country. {talking_points_line}
+
+There's nothing you need to do — I'd simply welcome a brief conversation whenever it suits you. Feel free to reply here, or I'll try you again in the next few days.
+
+{signature}
