@@ -1,0 +1,24 @@
+Write a NO-ANSWER INTRO email. I tried to reach this decision-maker by phone today and couldn't connect. The email introduces myself, explains briefly why I reached out, and leaves my contact info so they can reply or expect another call — no pressure.
+
+CONTACT & COMPANY:
+First name: {first_name}
+Full name: {full_name}
+Title: {title}
+Company: {company_name}
+Industry: {industry}
+Location: {location}
+
+RELATIONSHIP WITH PUROLATOR: {relationship_status}
+Relationship context: {relationship_context}
+Estimated current carrier: {current_carrier_estimated}
+Talking points / signals: {talking_points}
+Account notes: {account_notes}
+
+SENDER (me — use exactly in the signature):
+{rep_name}
+{rep_title}
+Phone: {rep_phone}
+Email: {rep_email}
+{rep_booking_line}
+
+Write the subject and body now. Keep the body 90–160 words, consultative, and easy to respond to. Return JSON only: {{"subject": "...", "body": "..."}}

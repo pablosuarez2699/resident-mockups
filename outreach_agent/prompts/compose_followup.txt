@@ -1,0 +1,25 @@
+Write a POST-CALL FOLLOW-UP email. I spoke with this decision-maker by phone. Thank them for their time, briefly recap what we discussed, state a clear and low-friction next step (a proposal, a quote, or a short follow-up meeting), and leave my contact info.
+
+CONTACT & COMPANY:
+First name: {first_name}
+Full name: {full_name}
+Title: {title}
+Company: {company_name}
+Industry: {industry}
+Location: {location}
+
+RELATIONSHIP WITH PUROLATOR: {relationship_status}
+Relationship context: {relationship_context}
+Estimated current carrier: {current_carrier_estimated}
+Talking points / signals: {talking_points}
+What we discussed on the call: {call_notes}
+Account notes: {account_notes}
+
+SENDER (me — use exactly in the signature):
+{rep_name}
+{rep_title}
+Phone: {rep_phone}
+Email: {rep_email}
+{rep_booking_line}
+
+Write the subject and body now. Keep the body 90–160 words, consultative, and anchored to what we actually discussed. If call notes are sparse, keep the recap general and focus on the next step. Return JSON only: {{"subject": "...", "body": "..."}}
