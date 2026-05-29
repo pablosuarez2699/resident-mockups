@@ -61,6 +61,11 @@ def _extract_province(location_str: str) -> str:
         part = part.strip()
         if part in CANADA_PROVINCES:
             return part
+        # Google often bundles the province with the postal code in one
+        # segment, e.g. "QC H3A 3H3" — match a province token within the part.
+        for token in part.split():
+            if token in CANADA_PROVINCES:
+                return token
     return ""
 
 
