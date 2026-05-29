@@ -28,7 +28,7 @@ def main(sectors, leads, hunter_budget, pages, sf_export, no_cache, dry_run, ran
     else:
         sector_list = [s.strip().lower() for s in sectors.split(",") if s.strip()]
 
-    console.print(f"[bold purple]Purolator Prospecting Agent[/bold purple]")
+    console.print(f"[bold purple]Purolator SMB Prospecting Agent[/bold purple]")
     console.print(f"Sectors: {', '.join(sector_list)} | Target: {leads} leads"
                   + (" | [cyan]randomized[/cyan]" if randomize else ""))
     if sf_export:
