@@ -6,23 +6,31 @@ console = Console()
 
 
 @click.command()
-@click.option("--sectors", default="retail,healthcare,tech,industrial",
-              help="Comma-separated list of sectors (retail, healthcare, tech, industrial)")
+@click.option("--sectors", default="all",
+              help='Comma-separated sectors (retail, healthcare, tech, industrial) or "all"')
 @click.option("--leads", default=100, type=int, help="Target number of output leads")
-@click.option("--hunter-budget", default=50, type=int, help="Max Hunter.io API calls per run")
-@click.option("--pages", default=5, type=int, help="Apollo pages to fetch per sector")
+@click.option("--hunter-budget", default=50, type=int, help="Max Hunter.io find-email calls per run")
+@click.option("--pages", default=5, type=int, help="Pages to fetch per sector per search term")
 @click.option("--sf-export", default=None, type=click.Path(exists=True),
               help="Path to Salesforce inactive accounts CSV export")
 @click.option("--no-cache", is_flag=True, default=False, help="Ignore existing lead cache")
 @click.option("--dry-run", is_flag=True, default=False, help="Validate API keys without generating leads")
-def main(sectors, leads, hunter_budget, pages, sf_export, no_cache, dry_run):
-    """Purolator SMB Prospecting Agent — generate qualified Canadian shipping leads."""
+@click.option("--randomize", is_flag=True, default=False,
+              help="Shuffle final leads within score bands for a diverse sector mix")
+def main(sectors, leads, hunter_budget, pages, sf_export, no_cache, dry_run, randomize):
+    """Purolator SMB Prospecting Agent — generate qualified Canadian B2B shipping leads."""
     from agent import run
+    from models.sector_config import SECTOR_CONFIGS
 
-    sector_list = [s.strip().lower() for s in sectors.split(",") if s.strip()]
+    all_sector_keys = list(SECTOR_CONFIGS.keys())
+    if sectors.strip().lower() == "all":
+        sector_list = all_sector_keys
+    else:
+        sector_list = [s.strip().lower() for s in sectors.split(",") if s.strip()]
 
     console.print(f"[bold purple]Purolator Prospecting Agent[/bold purple]")
-    console.print(f"Sectors: {', '.join(sector_list)} | Target: {leads} leads")
+    console.print(f"Sectors: {', '.join(sector_list)} | Target: {leads} leads"
+                  + (" | [cyan]randomized[/cyan]" if randomize else ""))
     if sf_export:
         console.print(f"Salesforce export: {sf_export}")
 
@@ -34,6 +42,7 @@ def main(sectors, leads, hunter_budget, pages, sf_export, no_cache, dry_run):
         sf_export_path=sf_export,
         use_cache=not no_cache,
         dry_run=dry_run,
+        randomize=randomize,
     )
 
     if output:

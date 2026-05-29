@@ -14,6 +14,8 @@ class SectorConfig:
     employee_min: int = 10
     employee_max: int = 500
     hardware_required: bool = False
+    # B2B-specific search terms for Google Places Text Search (free path)
+    google_search_terms: List[str] = field(default_factory=list)
 
 
 DEFAULT_TITLES = [
@@ -46,6 +48,12 @@ SECTOR_CONFIGS = {
             "has_phone": 1,
             "has_email": 1,
         },
+        google_search_terms=[
+            "B2B consumer goods distributor Canada",
+            "wholesale retail supplier Canada",
+            "e-commerce fulfillment company Canada",
+            "product importer exporter Canada",
+        ],
     ),
     "healthcare": SectorConfig(
         name="healthcare",
@@ -60,6 +68,12 @@ SECTOR_CONFIGS = {
             "has_phone": 1,
             "has_email": 1,
         },
+        google_search_terms=[
+            "medical supply company Canada",
+            "pharmaceutical distributor Canada",
+            "lab supply company Canada",
+            "medical device manufacturer Canada",
+        ],
     ),
     "tech": SectorConfig(
         name="tech",
@@ -75,6 +89,12 @@ SECTOR_CONFIGS = {
             "has_email": 1,
         },
         hardware_required=True,
+        google_search_terms=[
+            "electronics manufacturer Canada",
+            "hardware manufacturer Canada",
+            "IoT device company Canada",
+            "electronic components distributor Canada",
+        ],
     ),
     "industrial": SectorConfig(
         name="industrial",
@@ -89,5 +109,12 @@ SECTOR_CONFIGS = {
             "has_phone": 1,
             "has_email": 1,
         },
+        google_search_terms=[
+            "industrial distributor Canada",
+            "wholesale distributor Canada",
+            "warehouse logistics company Canada",
+            "manufacturing company Canada",
+            "industrial supplier Canada",
+        ],
     ),
 }

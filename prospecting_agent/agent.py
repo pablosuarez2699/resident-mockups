@@ -1,3 +1,4 @@
+import random
 from typing import List, Optional
 from rich.console import Console
 from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, MofNCompleteColumn
@@ -5,6 +6,7 @@ from rich.progress import Progress, SpinnerColumn, TextColumn, BarColumn, MofNCo
 import config
 from models.sector_config import SECTOR_CONFIGS, SectorConfig
 from models.lead import Lead
+from pipeline import fetcher as fetcher_module
 from pipeline.fetcher import fetch_sector
 from pipeline.enricher import enrich_emails
 from pipeline.linkedin_builder import build_urls_batch
@@ -27,6 +29,7 @@ def run(
     sf_export_path: Optional[str] = None,
     use_cache: bool = True,
     dry_run: bool = False,
+    randomize: bool = False,
 ) -> Optional[str]:
 
     cache = LeadCache()
@@ -43,23 +46,37 @@ def run(
         console.print(f"[red]No valid sectors specified. Choose from: {list(SECTOR_CONFIGS.keys())}[/red]")
         return None
 
-    plan_label = "[green]PAID — emails + phones enabled[/green]" if config.APOLLO_PLAN == "paid" \
-        else "[yellow]FREE — lookup-assist mode (company data only)[/yellow]"
-    console.print(f"[bold]Apollo plan:[/bold] {plan_label}")
+    if config.LEAD_SOURCE == "google":
+        source_label = "[green]Google Places + Hunter domain-search + web scraper (free path)[/green]"
+    else:
+        source_label = (
+            "[yellow]Apollo.io PAID — emails + phones enabled[/yellow]"
+            if config.APOLLO_PLAN == "paid"
+            else "[yellow]Apollo.io FREE — lookup-assist mode[/yellow]"
+        )
+    console.print(f"[bold]Lead source:[/bold] {source_label}")
+
+    # Reset Hunter domain-search budget for this run (Google path only)
+    fetcher_module.init_run()
 
     if dry_run:
         console.print("[yellow]Dry run: validating API connectivity...[/yellow]")
-        from clients.apollo_client import health_check
-        ok = health_check()
-        console.print(f"Apollo API: {'[green]OK[/green]' if ok else '[red]FAILED[/red]'}")
+        if config.LEAD_SOURCE == "google":
+            from clients.google_places_client import health_check as gp_check
+            ok = gp_check()
+            console.print(f"Google Places API: {'[green]OK[/green]' if ok else '[red]FAILED — check GOOGLE_PLACES_API_KEY[/red]'}")
+        else:
+            from clients.apollo_client import health_check
+            ok = health_check()
+            console.print(f"Apollo API: {'[green]OK[/green]' if ok else '[red]FAILED[/red]'}")
         if config.ANTHROPIC_API_KEY:
             console.print("[green]Anthropic API key: present[/green]")
         else:
             console.print("[red]Anthropic API key: MISSING[/red]")
         if config.HUNTER_API_KEY:
-            console.print("[green]Hunter API key: present[/green]")
+            console.print(f"[green]Hunter API key: present (domain-search budget: {config.HUNTER_DOMAIN_SEARCH_BUDGET}/run)[/green]")
         else:
-            console.print("[yellow]Hunter API key: not set (optional)[/yellow]")
+            console.print("[yellow]Hunter API key: not set — contact scraping will use website-only fallback[/yellow]")
         return None
 
     all_leads: List[Lead] = []
@@ -97,19 +114,28 @@ def run(
     console.print(f"[bold]Sending {len(claude_pool)} leads to Claude for qualification...[/bold]")
     claude_pool = qualify_leads_batch(claude_pool)
 
-    # Hunter email enrichment — fills gaps for paid-plan contacts missing an email
-    if config.APOLLO_PLAN == "paid" and config.HUNTER_API_KEY and hunter_budget > 0:
+    # Hunter find-email enrichment for Apollo-paid path (Google path handles Hunter inline)
+    if config.LEAD_SOURCE == "apollo" and config.APOLLO_PLAN == "paid" \
+            and config.HUNTER_API_KEY and hunter_budget > 0:
         missing_email = sum(1 for l in claude_pool if not l.email)
         console.print(
             f"[bold]Hunter email enrichment:[/bold] {missing_email} contacts without email "
             f"(budget: {hunter_budget})"
         )
         claude_pool = enrich_emails(claude_pool, hunter_budget)
-    elif config.APOLLO_PLAN == "free":
-        console.print("[yellow]Lookup-assist mode — Hunter skipped (no contacts yet)[/yellow]")
 
-    # Final sort by shipping score, take top N
-    final_leads = sorted(claude_pool, key=lambda l: l.shipping_score, reverse=True)[:target_leads]
+    # Final sort — strict by score, or shuffled within score bands for variety
+    if randomize:
+        high   = [l for l in claude_pool if l.shipping_score >= 8]
+        medium = [l for l in claude_pool if 5 <= l.shipping_score < 8]
+        low    = [l for l in claude_pool if l.shipping_score < 5]
+        random.shuffle(high)
+        random.shuffle(medium)
+        random.shuffle(low)
+        final_leads = (high + medium + low)[:target_leads]
+        console.print("[cyan]Randomized output:[/cyan] leads shuffled within score bands")
+    else:
+        final_leads = sorted(claude_pool, key=lambda l: l.shipping_score, reverse=True)[:target_leads]
 
     console.print(f"[bold green]Final leads selected:[/bold green] {len(final_leads)}")
 

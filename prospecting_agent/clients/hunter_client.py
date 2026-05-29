@@ -55,3 +55,25 @@ def verify_email(email: str) -> bool:
     except Exception as e:
         log.warning("Hunter verify_email failed for %s: %s", email, e)
         return False
+
+
+def domain_search(domain: str, limit: int = 10) -> list:
+    """Return known people at a domain from Hunter's database.
+
+    Each entry: {first_name, last_name, position, value (email), confidence, type}
+    Uses 1 Hunter credit per call. Free tier allows 25/month.
+    """
+    if not config.HUNTER_API_KEY or not domain:
+        return []
+    try:
+        data = _get("/domain-search", {
+            "domain": domain,
+            "limit": limit,
+            "type": "personal",
+        })
+        emails = data.get("data", {}).get("emails", [])
+        log.debug("Hunter domain_search %s → %d contacts", domain, len(emails))
+        return emails
+    except Exception as e:
+        log.warning("Hunter domain_search failed for %s: %s", domain, e)
+        return []
