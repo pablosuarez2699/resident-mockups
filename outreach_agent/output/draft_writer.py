@@ -40,10 +40,11 @@ def _write_markdown(draft: EmailDraft, out_dir: str, index: int) -> str:
     path = os.path.join(out_dir, fname)
 
     to_line = draft.to_email or "(no email on file — phone/LinkedIn only)"
+    to_name = draft.to_name or "(no contact name)"
     lines = [
         f"# {draft.company_name} — {draft.mode}",
         "",
-        f"**To:** {draft.to_name} <{to_line}>",
+        f"**To:** {to_name} <{to_line}>",
     ]
     if draft.cc:
         lines.append(f"**Cc:** {draft.cc}")

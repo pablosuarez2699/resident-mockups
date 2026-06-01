@@ -53,6 +53,20 @@ def test_blank_rows_skipped(tmp_path, monkeypatch):
     assert len(ingest(path)) == 1
 
 
+def test_placeholder_values_treated_as_empty(tmp_path, monkeypatch):
+    # The prospecting report uses "—" for unknown contact and "Find via Sales Nav →" for title
+    monkeypatch.setattr(config, "LEAD_SOURCE", "csv")
+    path = _write_csv(tmp_path,
+        "Company Name,Decision Maker,Title,Email\n"
+        "TGE Industrial,—,Find via Sales Nav →,\n")
+    leads = ingest(path)
+    assert len(leads) == 1
+    lead = leads[0]
+    assert lead.first_name == "" and lead.last_name == ""
+    assert lead.title == ""
+    assert lead.greeting_name == "there"   # clean fallback, not "—"
+
+
 def test_bad_path_returns_empty(monkeypatch):
     monkeypatch.setattr(config, "LEAD_SOURCE", "csv")
     assert ingest("/nonexistent/file.csv") == []

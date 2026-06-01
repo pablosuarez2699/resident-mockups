@@ -49,10 +49,19 @@ _HEADER_MAP = {
 }
 
 
+# Placeholder cell values that mean "no data" — e.g. the prospecting agent writes
+# "—" for an unknown decision-maker and "Find via Sales Nav →" for an unknown title.
+_PLACEHOLDERS = {"", "-", "—", "–", "n/a", "na", "none", "find via sales nav →",
+                 "find via sales nav"}
+
+
 def _clean(value) -> str:
     if value is None or (isinstance(value, float) and pd.isna(value)):
         return ""
-    return str(value).strip()
+    text = str(value).strip()
+    if text.lower() in _PLACEHOLDERS:
+        return ""
+    return text
 
 
 def _row_to_lead(row: dict) -> Lead:
