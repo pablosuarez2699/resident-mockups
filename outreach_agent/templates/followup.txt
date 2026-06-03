@@ -4,6 +4,7 @@ Thank you for taking the time to speak with me today — I really appreciated th
 
 {carrier_line}As a next step, I'd be glad to put together a tailored proposal for {company_name} so you can see exactly how this would work for your shipping. {talking_points_line}
 
-Just let me know a good time, or reply here and I'll send it over. Either way, my details are below if anything comes up down the road.
+Just let me know a good time, or reply here and I'll send it over.
 
-{signature}
+Thanks,
+{rep_name}
