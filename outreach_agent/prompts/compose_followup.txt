@@ -15,11 +15,9 @@ Talking points / signals: {talking_points}
 What we discussed on the call: {call_notes}
 Account notes: {account_notes}
 
-SENDER (me — use exactly in the signature):
+SENDER: My name is {rep_name}. Sign off with exactly:
+Thanks,
 {rep_name}
-{rep_title}
-Phone: {rep_phone}
-Email: {rep_email}
-{rep_booking_line}
+(Nothing after my name — no title, phone, or email.)
 
 Write the subject and body now. Keep the body 90–160 words, consultative, and anchored to what we actually discussed. If call notes are sparse, keep the recap general and focus on the next step. Return JSON only: {{"subject": "...", "body": "..."}}
