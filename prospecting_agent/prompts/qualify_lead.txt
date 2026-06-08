@@ -1,0 +1,23 @@
+Evaluate this Canadian business lead for Purolator shipping potential.
+
+LEAD DATA:
+Company: {company_name}
+Industry: {industry}
+Employees: {employee_count}
+Location: {location}
+Website: {website}
+Technologies: {technologies}
+Description: {company_description}
+Annual Revenue Estimate: {annual_revenue_estimate}
+Contact Title: {title}
+Lead Type: {lead_type}
+SF Prior Year Revenue: {sf_prior_year_revenue}
+
+Respond with a JSON object only — no markdown, no explanation, just the raw JSON:
+{{
+  "shipping_score": <1-10>,
+  "current_carrier_estimated": "<FedEx|UPS|FedEx/UPS|Likely 3PL|Unknown>",
+  "three_pl_risk": <true|false>,
+  "talking_points": "<2-3 sentence talking point for a sales rep>",
+  "reactivation_viable": <true|false>
+}}
