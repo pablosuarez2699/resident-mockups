@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+*.pyo
+.env
+.outreach_cache.json
+drafts/*.md
+drafts/*.xlsx
