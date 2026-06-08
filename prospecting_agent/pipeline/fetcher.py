@@ -233,6 +233,11 @@ def _build_lead_from_osm(biz: dict, sector: SectorConfig) -> Optional[Lead]:
     )
 
 
+def _norm_name(name: str) -> str:
+    """Normalize a company name for duplicate detection."""
+    return re.sub(r"[^a-z0-9]", "", name.lower())
+
+
 def _fetch_sector_google(
     sector: SectorConfig,
     cache: LeadCache,
@@ -242,6 +247,12 @@ def _fetch_sector_google(
     leads: List[Lead] = []
     search_terms = sector.google_search_terms or [f"{sector.display_name} company Canada"]
     log.info("[GOOGLE] Fetching sector: %s (%d search terms)", sector.display_name, len(search_terms))
+
+    # Within-run deduplication by normalized name and domain.
+    # The disk cache handles cross-run deduplication by place_id, but the
+    # same company can appear under different place_ids across search terms.
+    seen_names: set = set()
+    seen_domains: set = set()
 
     for term in search_terms:
         if len(leads) >= leads_needed:
@@ -274,8 +285,21 @@ def _fetch_sector_google(
                 if not place_id or cache.is_seen(place_id, place_id):
                     continue
 
+                # Name-level duplicate check (catches same company under a different place_id)
+                raw_name = (place.get("displayName") or {}).get("text", "")
+                norm = _norm_name(raw_name)
+                if norm and norm in seen_names:
+                    log.debug("Deduped by name: %s", raw_name)
+                    continue
+
                 lead = _build_lead_from_place(place, sector)
                 if lead is None:
+                    continue
+
+                # Domain-level duplicate check (catches same company with different place_ids/UTM variants)
+                domain = _domain_from_url(lead.website)
+                if domain and domain in seen_domains:
+                    log.debug("Deduped by domain: %s (%s)", raw_name, domain)
                     continue
 
                 # Must be Canadian (double-check province)
@@ -286,6 +310,10 @@ def _fetch_sector_google(
                 lead = _enrich_contact_google_path(lead, sector)
 
                 cache.mark_seen(place_id, place_id)
+                if norm:
+                    seen_names.add(norm)
+                if domain:
+                    seen_domains.add(domain)
                 leads.append(lead)
 
             page_token = result.get("nextPageToken")
