@@ -76,22 +76,24 @@ def qualify_lead(lead: Lead) -> dict:
         return json.loads(raw)
     except json.JSONDecodeError as e:
         log.warning("Claude returned invalid JSON for %s: %s", lead.company_name, e)
-        return {
-            "shipping_score": lead.rule_score,
-            "current_carrier_estimated": "Unknown",
-            "three_pl_risk": False,
-            "talking_points": "",
-            "reactivation_viable": True,
-        }
+        return _fallback_result(lead)
     except Exception as e:
         log.error("Claude qualify failed for %s: %s", lead.company_name, e)
-        return {
-            "shipping_score": lead.rule_score,
-            "current_carrier_estimated": "Unknown",
-            "three_pl_risk": False,
-            "talking_points": "",
-            "reactivation_viable": True,
-        }
+        return _fallback_result(lead)
+
+
+def _fallback_result(lead: Lead) -> dict:
+    # Threshold passes on failure so a transient API error never drops a lead
+    return {
+        "shipping_score": lead.rule_score,
+        "current_carrier_estimated": "Unknown",
+        "three_pl_risk": False,
+        "talking_points": "",
+        "reactivation_viable": True,
+        "est_daily_shipments": 0,
+        "est_annual_shipping_spend_cad": 0,
+        "meets_25k_threshold": True,
+    }
 
 
 def qualify_leads_batch(leads: List[Lead]) -> List[Lead]:
@@ -102,6 +104,9 @@ def qualify_leads_batch(leads: List[Lead]) -> List[Lead]:
         lead.current_carrier_estimated = result.get("current_carrier_estimated", "Unknown")
         lead.three_pl_risk = result.get("three_pl_risk", False)
         lead.talking_points = result.get("talking_points", "")
+        lead.est_daily_shipments = int(result.get("est_daily_shipments") or 0)
+        lead.est_annual_shipping_spend = int(result.get("est_annual_shipping_spend_cad") or 0)
+        lead.meets_spend_threshold = bool(result.get("meets_25k_threshold", True))
 
         if lead.lead_type == "REACTIVATION" and not result.get("reactivation_viable", True):
             lead.shipping_score = min(lead.shipping_score, 3)

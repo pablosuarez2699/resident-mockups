@@ -7,6 +7,21 @@ PUROLATOR CONTEXT:
 - Competitive advantage over 3PL group accounts: personalized service, dedicated account manager, flexible pricing
 - Ideal customer profile: mid-size Canadian businesses with regular outbound shipping needs (10-500 employees)
 
+SHIPPING SPEND ESTIMATION ($25K THRESHOLD MATH):
+You must estimate each company's annual shipping spend and decide if it clears $25,000/year.
+- Volume bar: 5+ parcels per business day on average.
+- Average Purolator domestic B2B parcel: ~$20 (heavier business shipments, insurance, dimensional weight)
+- The math: 5 parcels/day × 250 business days × $20 = $25,000/year.
+- Revenue cross-check: shipping is ~3-6% of revenue for wholesale/distribution, ~8-12% for e-commerce.
+  → distributor needs ~$500K+ revenue; e-commerce needs ~$250K+ revenue to clear $25K spend.
+- Wholesale revenue per employee ≈ $400K, so even a 2-3 person genuine distributor usually clears the bar.
+ESTIMATE est_daily_shipments from business model: a wholesale distributor ships dozens/day; a niche
+e-commerce shop maybe 5-20/day; a service business or single retail storefront ships ~0-2/day.
+Then est_annual_shipping_spend_cad = est_daily_shipments × 250 business days × $20.
+Set meets_25k_threshold=false for: service businesses, consultancies, single storefronts without
+e-commerce, micro shops, or any company whose model implies fewer than 5 shipments/day. When evidence
+is genuinely ambiguous but the business model ships physical product B2B, lean true.
+
 SCORING RUBRIC (1-10):
 10: Near-certain high-value prospect. Distributor or wholesaler, 50+ employees, physical product business, ships frequently across Canada.
 8-9: Strong prospect. Clear product shipping needs, right employee size, decision-maker identified.
@@ -44,3 +59,6 @@ Respond with a JSON object per lead with these exact fields:
 - three_pl_risk: boolean
 - talking_points: string (2-3 sentences)
 - reactivation_viable: boolean (only relevant if lead_type is REACTIVATION)
+- est_daily_shipments: integer (estimated parcels per business day)
+- est_annual_shipping_spend_cad: integer (est_daily_shipments × 250 × 20)
+- meets_25k_threshold: boolean (est_daily_shipments >= 5)

@@ -124,6 +124,24 @@ def run(
         )
         claude_pool = enrich_emails(claude_pool, hunter_budget)
 
+    # $25K/yr shipping spend filter: drop companies estimated below the
+    # volume bar (MIN_DAILY_SHIPMENTS parcels/business day, ~$20 avg parcel)
+    if config.MIN_DAILY_SHIPMENTS > 0:
+        before = len(claude_pool)
+        claude_pool = [
+            l for l in claude_pool
+            if l.meets_spend_threshold and (
+                l.est_daily_shipments == 0  # estimate unavailable (API fallback) — keep
+                or l.est_daily_shipments >= config.MIN_DAILY_SHIPMENTS
+            )
+        ]
+        dropped = before - len(claude_pool)
+        if dropped:
+            console.print(
+                f"[yellow]Spend filter:[/yellow] dropped {dropped} leads below "
+                f"~{config.MIN_DAILY_SHIPMENTS} shipments/day (≈$25K/yr)"
+            )
+
     # Final sort — strict by score, or shuffled within score bands for variety
     if randomize:
         high   = [l for l in claude_pool if l.shipping_score >= 8]

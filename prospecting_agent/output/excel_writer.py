@@ -36,6 +36,7 @@ COLUMNS = [
     ("Carrier (Est.)", 14),
     ("3PL Risk", 10),
     ("Score", 8),
+    ("Est. Spend ($/yr)", 16),
     ("Talking Points", 60),
     ("Date", 12),
     ("Email Verified", 14),
@@ -97,9 +98,12 @@ def _write_lead_row(ws, row_idx: int, lead: Lead) -> None:
     score_fill = _score_cell_color(lead.shipping_score)
     score_cell.fill = PatternFill(fill_type="solid", fgColor=score_fill)
     score_cell.alignment = Alignment(horizontal="center", vertical="center")
-    cell(16, lead.talking_points, wrap=True)
-    cell(17, lead.date_generated)
-    cell(18, "Yes" if lead.email_verified else "No")
+    spend_cell = cell(16, lead.est_annual_shipping_spend or None)
+    spend_cell.number_format = "$#,##0"
+    spend_cell.alignment = Alignment(horizontal="right", vertical="center")
+    cell(17, lead.talking_points, wrap=True)
+    cell(18, lead.date_generated)
+    cell(19, "Yes" if lead.email_verified else "No")
 
     ws.row_dimensions[row_idx].height = 60 if lead.talking_points else 20
 
@@ -113,6 +117,10 @@ def _write_summary_sheet(wb, leads: List[Lead], run_start: datetime, sector_name
         ("Run Date", run_start.strftime("%Y-%m-%d %H:%M")),
         ("Total Leads", len(leads)),
         ("Sectors", ", ".join(sector_names)),
+        ("", ""),
+        ("Avg Est. Spend ($/yr)",
+         f"${sum(l.est_annual_shipping_spend for l in leads) // max(1, sum(1 for l in leads if l.est_annual_shipping_spend)):,}"
+         if any(l.est_annual_shipping_spend for l in leads) else "n/a"),
         ("", ""),
         ("Score Breakdown", ""),
         ("High (8-10)", sum(1 for l in leads if l.shipping_score >= 8)),

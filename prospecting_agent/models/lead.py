@@ -41,6 +41,11 @@ class Lead:
     rule_score: int = 0
     talking_points: str = ""
 
+    # Shipping spend estimate ($25K/yr threshold filter)
+    est_daily_shipments: int = 0
+    est_annual_shipping_spend: int = 0
+    meets_spend_threshold: bool = True
+
     # Meta
     sector: str = ""
     date_generated: str = ""

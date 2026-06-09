@@ -19,5 +19,8 @@ Respond with a JSON object only — no markdown, no explanation, just the raw JS
   "current_carrier_estimated": "<FedEx|UPS|FedEx/UPS|Likely 3PL|Unknown>",
   "three_pl_risk": <true|false>,
   "talking_points": "<2-3 sentence talking point for a sales rep>",
-  "reactivation_viable": <true|false>
+  "reactivation_viable": <true|false>,
+  "est_daily_shipments": <integer>,
+  "est_annual_shipping_spend_cad": <integer>,
+  "meets_25k_threshold": <true|false>
 }}
