@@ -34,7 +34,11 @@ def run(
 
     cache = LeadCache()
     if not use_cache:
-        cache.clear()
+        # Bypass seen-checks for this run only — history is preserved, and new
+        # leads are still recorded. WARNING: this run may repeat past companies.
+        cache.bypass = True
+        console.print("[bold red]⚠ --no-cache: this run may repeat companies "
+                      "from previous reports. Freshness history is preserved.[/bold red]")
 
     sf_accounts = {}
     if sf_export_path:

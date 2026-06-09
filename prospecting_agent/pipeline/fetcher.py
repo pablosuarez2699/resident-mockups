@@ -49,10 +49,8 @@ _domain_budget: List[int] = [0]
 
 
 def init_run() -> None:
-    """Reset the Hunter domain-search budget and run-wide dedup sets."""
+    """Reset the Hunter domain-search budget counter for a fresh run."""
     _domain_budget[0] = config.HUNTER_DOMAIN_SEARCH_BUDGET
-    _run_seen_names.clear()
-    _run_seen_domains.clear()
     log.info("Hunter domain-search budget reset to %d", _domain_budget[0])
 
 
@@ -246,25 +244,6 @@ def _domain_key(url: str) -> str:
     return domain.split(".")[0] if domain else ""
 
 
-# Run-wide dedup sets (cross-sector, cross-search-term). Reset by init_run().
-# The disk cache handles cross-run dedup by place_id, but the same company can
-# appear under different place_ids, name variants, or .ca/.com domain twins.
-_run_seen_names: set = set()
-_run_seen_domains: set = set()
-
-
-def _is_dup_name(norm: str) -> bool:
-    """Exact match, or prefix match for name variants like
-    'medline' vs 'medlinecanadacorporation' (min 6 chars to avoid false hits)."""
-    if norm in _run_seen_names:
-        return True
-    for seen in _run_seen_names:
-        shorter, longer = (norm, seen) if len(norm) <= len(seen) else (seen, norm)
-        if len(shorter) >= 6 and longer.startswith(shorter):
-            return True
-    return False
-
-
 def _fetch_sector_google(
     sector: SectorConfig,
     cache: LeadCache,
@@ -306,10 +285,11 @@ def _fetch_sector_google(
                 if not place_id or cache.is_seen(place_id, place_id):
                     continue
 
-                # Name-level duplicate check (catches same company under a different place_id)
+                # Name-level duplicate check — persistent across runs, so the
+                # same company never reappears in a future batch
                 raw_name = (place.get("displayName") or {}).get("text", "")
                 norm = _norm_name(raw_name)
-                if norm and _is_dup_name(norm):
+                if cache.is_dup_name(norm):
                     log.info("Deduped by name: %s", raw_name)
                     continue
 
@@ -320,7 +300,7 @@ def _fetch_sector_google(
                 # Domain-level duplicate check: brand label matches across
                 # place_ids, UTM variants, and .ca/.com twins (medline.ca == medline.com)
                 dkey = _domain_key(lead.website)
-                if dkey and dkey in _run_seen_domains:
+                if cache.is_dup_domain(dkey):
                     log.info("Deduped by domain: %s (%s)", raw_name, dkey)
                     continue
 
@@ -332,10 +312,7 @@ def _fetch_sector_google(
                 lead = _enrich_contact_google_path(lead, sector)
 
                 cache.mark_seen(place_id, place_id)
-                if norm:
-                    _run_seen_names.add(norm)
-                if dkey:
-                    _run_seen_domains.add(dkey)
+                cache.mark_company(norm, dkey)
                 leads.append(lead)
 
             page_token = result.get("nextPageToken")

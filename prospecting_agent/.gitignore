@@ -2,5 +2,6 @@ __pycache__/
 *.pyc
 *.pyo
 .env
-.lead_cache.json
 reports/*.xlsx
+# NOTE: .lead_cache.json is deliberately COMMITTED — it is the freshness
+# history that guarantees no company ever repeats across batches.

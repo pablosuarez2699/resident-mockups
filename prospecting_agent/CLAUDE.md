@@ -71,9 +71,16 @@ main.py (click CLI)
   text, cache_control:{type:"ephemeral"}}]` block. Model is
   `config.CLAUDE_MODEL` (default `claude-sonnet-4-6`). Parse JSON defensively
   (strip ``` fences, fall back to rule_score on parse failure).
-- **Caching:** `utils/cache.LeadCache` dedupes across runs via
-  `is_seen(org_id, contact_id)` / `mark_seen(...)`. Google path uses
-  `place_id` for both args.
+- **Caching / FRESHNESS GUARANTEE (user directive — do not violate):** every
+  batch must contain only never-before-delivered companies. `utils/cache.LeadCache`
+  enforces this persistently three ways: place_id (`is_seen`), normalized company
+  name with prefix matching (`is_dup_name` — "Medline" == "Medline Canada Corp"),
+  and domain brand label (`is_dup_domain` — medline.ca == medline.com).
+  `.lead_cache.json` is **committed to git** so history survives ephemeral
+  containers — NEVER delete it, never re-gitignore it, and commit it after every
+  run. `--no-cache` only bypasses checks for one run (testing); it must never
+  delete history. If the lead well runs dry, expand `google_search_terms` with
+  city-specific variants instead of clearing the cache.
 
 ## Lead source paths (current state)
 
