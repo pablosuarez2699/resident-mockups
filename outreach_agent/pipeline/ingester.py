@@ -90,8 +90,11 @@ def _row_to_lead(row: dict) -> Lead:
         lead.first_name = parts[0]
         lead.last_name = " ".join(parts[1:])
 
-    # Derive relationship_status from lead_type when not explicitly provided
-    if not _norm_present(row, "relationship_status") and lead.lead_type:
+    # Derive relationship_status from lead_type ONLY when a Lead Type column was
+    # actually present in the row. (The Lead model defaults lead_type to "NEW",
+    # so without this guard every row with no Relationship column would wrongly
+    # become a "prospect" — see batch use where contacts are existing customers.)
+    if not _norm_present(row, "relationship_status") and _norm_present(row, "lead_type"):
         lt = lead.lead_type.strip().lower()
         if lt == "reactivation":
             lead.relationship_status = "lapsed"
