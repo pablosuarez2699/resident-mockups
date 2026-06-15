@@ -18,6 +18,27 @@ class SectorConfig:
     google_search_terms: List[str] = field(default_factory=list)
 
 
+# Major Canadian metros used to generate city-targeted search variants. These
+# widen the pool of fresh companies once the national-level terms get exhausted
+# by the dedup cache. Ordered by business density.
+CANADIAN_METROS = [
+    "Toronto", "Montreal", "Vancouver", "Calgary", "Edmonton",
+    "Ottawa", "Mississauga", "Winnipeg", "Hamilton", "Quebec City",
+    "Brampton", "Surrey", "Laval", "Markham", "Vaughan",
+]
+
+
+def _with_city_variants(base_terms, city_templates):
+    """National terms first, then `template Cityname` variants for each metro.
+    The fetcher consumes terms in order and stops at the per-sector target, so
+    city variants act as fresh-lead reserves drawn on only when needed."""
+    expanded = list(base_terms)
+    for template in city_templates:
+        for city in CANADIAN_METROS:
+            expanded.append(f"{template} {city}")
+    return expanded
+
+
 DEFAULT_TITLES = [
     "Purchasing Manager",
     "Head of Operations",
@@ -48,17 +69,20 @@ SECTOR_CONFIGS = {
             "has_phone": 1,
             "has_email": 1,
         },
-        google_search_terms=[
-            "B2B consumer goods distributor Canada",
-            "wholesale retail supplier Canada",
-            "e-commerce fulfillment company Canada",
-            "product importer exporter Canada",
-            # B2C / DTC high-volume shippers (gated by shipping-volume filter)
-            "online store Canada ships nationwide",
-            "direct-to-consumer brand Canada",
-            "online retailer Canada shipping",
-            "subscription box company Canada",
-        ],
+        google_search_terms=_with_city_variants(
+            [
+                "B2B consumer goods distributor Canada",
+                "wholesale retail supplier Canada",
+                "e-commerce fulfillment company Canada",
+                "product importer exporter Canada",
+                # B2C / DTC high-volume shippers (gated by shipping-volume filter)
+                "online store Canada ships nationwide",
+                "direct-to-consumer brand Canada",
+                "online retailer Canada shipping",
+                "subscription box company Canada",
+            ],
+            ["consumer goods distributor", "wholesale supplier", "e-commerce fulfillment company"],
+        ),
     ),
     "healthcare": SectorConfig(
         name="healthcare",
@@ -73,12 +97,15 @@ SECTOR_CONFIGS = {
             "has_phone": 1,
             "has_email": 1,
         },
-        google_search_terms=[
-            "medical supply company Canada",
-            "pharmaceutical distributor Canada",
-            "lab supply company Canada",
-            "medical device manufacturer Canada",
-        ],
+        google_search_terms=_with_city_variants(
+            [
+                "medical supply company Canada",
+                "pharmaceutical distributor Canada",
+                "lab supply company Canada",
+                "medical device manufacturer Canada",
+            ],
+            ["medical supply company", "pharmaceutical distributor", "lab supply company"],
+        ),
     ),
     "tech": SectorConfig(
         name="tech",
@@ -94,12 +121,15 @@ SECTOR_CONFIGS = {
             "has_email": 1,
         },
         hardware_required=True,
-        google_search_terms=[
-            "electronics manufacturer Canada",
-            "hardware manufacturer Canada",
-            "IoT device company Canada",
-            "electronic components distributor Canada",
-        ],
+        google_search_terms=_with_city_variants(
+            [
+                "electronics manufacturer Canada",
+                "hardware manufacturer Canada",
+                "IoT device company Canada",
+                "electronic components distributor Canada",
+            ],
+            ["electronics manufacturer", "hardware manufacturer", "electronic components distributor"],
+        ),
     ),
     "industrial": SectorConfig(
         name="industrial",
@@ -114,12 +144,15 @@ SECTOR_CONFIGS = {
             "has_phone": 1,
             "has_email": 1,
         },
-        google_search_terms=[
-            "industrial distributor Canada",
-            "wholesale distributor Canada",
-            "warehouse logistics company Canada",
-            "manufacturing company Canada",
-            "industrial supplier Canada",
-        ],
+        google_search_terms=_with_city_variants(
+            [
+                "industrial distributor Canada",
+                "wholesale distributor Canada",
+                "warehouse logistics company Canada",
+                "manufacturing company Canada",
+                "industrial supplier Canada",
+            ],
+            ["industrial distributor", "wholesale distributor", "manufacturing company", "industrial supplier"],
+        ),
     ),
 }

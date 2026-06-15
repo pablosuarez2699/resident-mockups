@@ -80,7 +80,8 @@ main.py (click CLI)
   containers — NEVER delete it, never re-gitignore it, and commit it after every
   run. `--no-cache` only bypasses checks for one run (testing); it must never
   delete history. If the lead well runs dry, expand `google_search_terms` with
-  city-specific variants instead of clearing the cache.
+  more city-specific variants (via `_with_city_variants` + `CANADIAN_METROS` in
+  `sector_config.py`) or add metros to that list — never clear the cache.
 
 ## Lead source paths (current state)
 
