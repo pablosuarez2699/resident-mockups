@@ -53,6 +53,11 @@ SECTOR_CONFIGS = {
             "wholesale retail supplier Canada",
             "e-commerce fulfillment company Canada",
             "product importer exporter Canada",
+            # B2C / DTC high-volume shippers (gated by shipping-volume filter)
+            "online store Canada ships nationwide",
+            "direct-to-consumer brand Canada",
+            "online retailer Canada shipping",
+            "subscription box company Canada",
         ],
     ),
     "healthcare": SectorConfig(

@@ -30,17 +30,21 @@ DECISION_MAKER_TITLES = [
     "Supply Chain Manager", "Operations Manager",
 ]
 
-# Google Places types that indicate consumer-facing businesses — skip these for B2B
-_CONSUMER_TYPES = {
+# Google Places types for businesses that structurally NEVER ship parcels —
+# local-presence-only services. Always skip these, B2B or B2C.
+# NOTE: We intentionally do NOT block retail/store types (clothing_store,
+# shoe_store, jewelry_store, florist, store, etc.) because a B2C e-commerce /
+# DTC brand can ship just as much as a B2B distributor. Those are allowed
+# through and gated by the shipping-volume filter (MIN_DAILY_SHIPMENTS) — a
+# company only survives if Claude estimates it ships 5+ parcels/day (~$25K/yr).
+_NEVER_SHIPS_TYPES = {
     "restaurant", "cafe", "bar", "night_club", "lodging", "hotel",
     "beauty_salon", "hair_care", "spa", "gym", "fitness_center",
-    "grocery_or_supermarket", "supermarket", "convenience_store",
-    "clothing_store", "shoe_store", "jewelry_store", "florist",
     "real_estate_agency", "dentist", "doctor", "hospital",
     "veterinary_care", "school", "university", "church", "place_of_worship",
     "movie_theater", "amusement_park", "zoo", "aquarium",
     "gas_station", "car_wash", "car_dealer", "car_repair",
-    "laundry", "dry_cleaning", "bakery",
+    "laundry", "dry_cleaning",
 }
 
 # Module-level shared Hunter domain-search budget for the current run.
@@ -96,9 +100,12 @@ def _domain_from_url(url: str) -> str:
 # Google Places path — free (within $200/mo credit)
 # ---------------------------------------------------------------------------
 
-def _is_b2b_place(place: dict) -> bool:
+def _is_shipping_capable_place(place: dict) -> bool:
+    """Allow B2B and B2C companies, but skip local-service businesses that
+    structurally never ship parcels. Shipping VOLUME is gated downstream by
+    the MIN_DAILY_SHIPMENTS filter, so a B2C e-commerce brand stays in."""
     types = set(place.get("types", []))
-    return not types.intersection(_CONSUMER_TYPES)
+    return not types.intersection(_NEVER_SHIPS_TYPES)
 
 
 def _parse_google_address(formatted_address: str) -> tuple:
@@ -278,7 +285,7 @@ def _fetch_sector_google(
                 # Skip non-operational or consumer-facing
                 if place.get("businessStatus") not in ("OPERATIONAL", None, ""):
                     continue
-                if not _is_b2b_place(place):
+                if not _is_shipping_capable_place(place):
                     continue
 
                 place_id = place.get("id", "")

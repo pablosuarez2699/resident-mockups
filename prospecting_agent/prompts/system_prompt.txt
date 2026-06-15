@@ -22,6 +22,13 @@ Set meets_25k_threshold=false for: service businesses, consultancies, single sto
 e-commerce, micro shops, or any company whose model implies fewer than 5 shipments/day. When evidence
 is genuinely ambiguous but the business model ships physical product B2B, lean true.
 
+B2B AND B2C BOTH QUALIFY — SHIPPING VOLUME IS THE ONLY TEST:
+A B2C company (direct-to-consumer brand, online retailer, subscription box, DTC e-commerce) qualifies
+exactly when it ships as much as a B2B company would — i.e. 5+ parcels/business day. Do NOT reject a
+lead just because its customers are consumers. A DTC apparel brand or online store shipping 20 orders/day
+clears the bar and is a strong Purolator prospect. Conversely, reject a single brick-and-mortar shop with
+no meaningful online/shipping operation. Judge on parcel volume out the door, not on who the customer is.
+
 SCORING RUBRIC (1-10):
 10: Near-certain high-value prospect. Distributor or wholesaler, 50+ employees, physical product business, ships frequently across Canada.
 8-9: Strong prospect. Clear product shipping needs, right employee size, decision-maker identified.

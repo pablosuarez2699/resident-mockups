@@ -98,10 +98,15 @@ Per-sector search config lives in `models/sector_config.py`:
 
 ## Business rules (domain logic — preserve these)
 
-- **B2B priority:** consumer-facing Google Places types (restaurant, retail
-  store, salon, etc.) are filtered out via `_CONSUMER_TYPES` in `fetcher.py`.
-  Search terms are deliberately B2B (distributor, supplier, manufacturer,
-  wholesaler).
+- **B2B *and* B2C, gated by shipping volume:** the only structural filter is
+  `_NEVER_SHIPS_TYPES` in `fetcher.py` (`_is_shipping_capable_place`), which drops
+  local-service types that never ship parcels (restaurant, salon, gym, hotel,
+  dentist, auto shop, etc.). Retail/store types are deliberately **allowed** —
+  a B2C e-commerce / DTC brand qualifies if it ships as much as a B2B (5+
+  parcels/day). The real gate is the `MIN_DAILY_SHIPMENTS` spend filter +
+  Claude's per-company volume estimate, NOT the customer type. Search terms
+  cover both B2B (distributor, supplier, manufacturer, wholesaler) and B2C
+  high-volume shippers (DTC brand, online retailer, subscription box).
 - **3PL risk:** companies on a *group/3PL discount account* get
   `shipping_score` capped at 4 (`three_pl_risk`). Companies with their *own*
   ShipStation/Shippo account are still winnable — NOT flagged.
