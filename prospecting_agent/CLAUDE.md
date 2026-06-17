@@ -97,6 +97,31 @@ Per-sector search config lives in `models/sector_config.py`:
 (B2B-specific, Google path). Sectors: `retail`, `healthcare`, `tech`,
 `industrial`. `--sectors all` expands to all four.
 
+## Output format (user directive — this is the default, do not change without asking)
+
+The Excel deliverable is a **4-column Salesforce-upload layout**, NOT the old
+detailed report. `output/excel_writer.py` writes exactly:
+
+| Column | Source | Notes |
+|--------|--------|-------|
+| Vertical | `VERTICAL_MAP[lead.sector]` | MUST match the SFDC picklist verbatim |
+| SFDC Account | (blank) | rep fills this in manually |
+| Prospect Business Name | `lead.company_name` | |
+| Prospect Link | `lead.website` | clickable hyperlink |
+
+**Vertical picklist mapping (exact SFDC dropdown values — validation fails on any mismatch):**
+- `retail` → `Retail`
+- `healthcare` → `Health Care` (two words)
+- `tech` → `Technology`
+- `industrial` → `Industrial Supply`
+
+Full list of valid SFDC verticals (for reference if sectors expand): Aerospatial,
+Agriculture, Automotive, Chemicals, Construction, Cosmetic - Professional, Education,
+Entertainment, Finance Insurance and Real Estate, Food and Beverage, Forestry Wood Pulp
+and Paper, Government, Health Care, Industrial Supply, Logistic, Manufacture, Metals, Oil
+Gas Mining and Utilities, Power Generation, Professional Services, Retail, Technology,
+Transportation and Logistics, Wholesaler, Wood, Other, Unassigned.
+
 ## Business rules (domain logic — preserve these)
 
 - **B2B *and* B2C, gated by shipping volume:** the only structural filter is
