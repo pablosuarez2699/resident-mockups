@@ -22,6 +22,22 @@ COLUMNS = [
     ("Prospect Link",         40),
 ]
 
+# Clean, single-word vertical names for the Salesforce picklist — no slashes.
+VERTICAL_MAP = {
+    "retail":     "Retail",
+    "healthcare": "Healthcare",
+    "tech":       "Technology",
+    "industrial": "Industrial",
+}
+
+
+def _vertical(lead: Lead) -> str:
+    """Map a lead's sector to the clean Vertical value the SFDC tool accepts."""
+    if lead.sector in VERTICAL_MAP:
+        return VERTICAL_MAP[lead.sector]
+    # Fallback: strip any "X / Y" formatting down to the first clean token
+    return (lead.industry or "").split("/")[0].strip()
+
 
 def _apply_header(ws) -> None:
     hdr_font  = Font(name="Calibri", bold=True, color="FFFFFF", size=11)
@@ -49,7 +65,7 @@ def _write_lead_row(ws, row_idx: int, lead: Lead) -> None:
             c.fill = fill
         return c
 
-    w(1, lead.industry)   # Vertical
+    w(1, _vertical(lead))   # Vertical
     w(2, "")              # SFDC Account — left blank for the rep to fill in
     w(3, lead.company_name)
 
