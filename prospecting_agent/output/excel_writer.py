@@ -22,12 +22,13 @@ COLUMNS = [
     ("Prospect Link",         40),
 ]
 
-# Clean, single-word vertical names for the Salesforce picklist — no slashes.
+# Exact Vertical picklist values accepted by the Salesforce upload tool.
+# These must match the dropdown options verbatim or the upload validation fails.
 VERTICAL_MAP = {
     "retail":     "Retail",
-    "healthcare": "Healthcare",
+    "healthcare": "Health Care",
     "tech":       "Technology",
-    "industrial": "Industrial",
+    "industrial": "Industrial Supply",
 }
 
 
