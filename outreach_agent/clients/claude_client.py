@@ -71,7 +71,8 @@ def compose_email(lead: Lead, mode: OutreachMode, fields: Dict[str, str],
             if raw.startswith("json"):
                 raw = raw[4:]
         data = json.loads(raw)
-        subject = (data.get("subject") or "").strip() or fallback_subject
+        # Always use the fixed subject line, not the model's suggestion.
+        subject = fallback_subject
         body = (data.get("body") or "").strip()
         if not body:
             log.warning("Claude returned empty body for %s — falling back to template", lead.company_name)

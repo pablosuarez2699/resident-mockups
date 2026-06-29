@@ -104,10 +104,8 @@ def build_fields(lead: Lead) -> Dict[str, str]:
 
 
 def _subject(lead: Lead, mode: OutreachMode) -> str:
-    return mode.subject_template.format(
-        company_name=lead.company_name or "your team",
-        first_name=lead.first_name or "there",
-    )
+    # Fixed subject line for ALL outreach emails, regardless of mode.
+    return f"Purolator & {lead.company_name or 'your business'}"
 
 
 def render_template(lead: Lead, mode: OutreachMode, fields: Dict[str, str]) -> EmailDraft:
