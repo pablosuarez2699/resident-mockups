@@ -157,7 +157,13 @@ def run(
         final_leads = (high + medium + low)[:target_leads]
         console.print("[cyan]Randomized output:[/cyan] leads shuffled within score bands")
     else:
-        final_leads = sorted(claude_pool, key=lambda l: l.shipping_score, reverse=True)[:target_leads]
+        # Rank by score, then estimated shipping spend so ties go to the
+        # bigger shipper — matters when cutting to a small top-N batch
+        final_leads = sorted(
+            claude_pool,
+            key=lambda l: (l.shipping_score, l.est_annual_shipping_spend),
+            reverse=True,
+        )[:target_leads]
 
     console.print(f"[bold green]Final leads selected:[/bold green] {len(final_leads)}")
 
