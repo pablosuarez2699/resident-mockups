@@ -5,3 +5,4 @@ __pycache__/
 .outreach_cache.json
 drafts/*.md
 drafts/*.xlsx
+data/_*.csv
