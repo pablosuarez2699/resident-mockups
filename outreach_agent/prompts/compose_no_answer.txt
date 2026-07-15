@@ -1,4 +1,6 @@
-Write a NO-ANSWER INTRO email. I tried to reach this decision-maker by phone today and couldn't connect. The email introduces myself, explains briefly why I reached out, and leaves my contact info so they can reply or expect another call — no pressure.
+Write a NO-ANSWER INTRO email. I tried to reach this decision-maker by phone today and couldn't connect.
+
+IMPORTANT: Unless the relationship below is "prospect", this person is an EXISTING Purolator customer and I am their dedicated account manager — NOT a cold prospect. Write it that way: introduce myself as THEIR account manager and personal point of contact who looks after their account, reaching out proactively to make sure their shipping is running well. Do NOT pitch Purolator as if they've never used us, and do NOT use cold-prospecting phrasing like "a select number of businesses in your area," "introduce Purolator," or "see if there's a fit." The email explains briefly that I'm checking in as their account manager, and makes it easy to reply or expect another call — no pressure.
 
 CONTACT & COMPANY:
 First name: {first_name}

@@ -91,7 +91,7 @@ def _row_to_lead(row: dict) -> Lead:
         lead.last_name = " ".join(parts[1:])
 
     # Derive relationship_status from lead_type when not explicitly provided
-    if not _norm_present(row, "relationship_status") and lead.lead_type:
+    if not _norm_present(row, "relationship_status") and _norm_present(row, "lead_type"):
         lt = lead.lead_type.strip().lower()
         if lt == "reactivation":
             lead.relationship_status = "lapsed"
