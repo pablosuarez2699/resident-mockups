@@ -16,6 +16,9 @@ class SectorConfig:
     hardware_required: bool = False
     # B2B-specific search terms for Google Places Text Search (free path)
     google_search_terms: List[str] = field(default_factory=list)
+    # Short keyword forms for the geo-grid sweep (no city/Canada suffix —
+    # the locationBias circle supplies the geography)
+    grid_terms: List[str] = field(default_factory=list)
 
 
 # Major Canadian metros used to generate city-targeted search variants. These
@@ -83,6 +86,7 @@ SECTOR_CONFIGS = {
             ],
             ["consumer goods distributor", "wholesale supplier", "e-commerce fulfillment company"],
         ),
+        grid_terms=["consumer goods distributor", "wholesale supplier", "e-commerce company", "product distributor"],
     ),
     "healthcare": SectorConfig(
         name="healthcare",
@@ -106,6 +110,7 @@ SECTOR_CONFIGS = {
             ],
             ["medical supply company", "pharmaceutical distributor", "lab supply company"],
         ),
+        grid_terms=["medical supply company", "pharmaceutical distributor", "lab supply company", "medical equipment supplier"],
     ),
     "tech": SectorConfig(
         name="tech",
@@ -130,6 +135,7 @@ SECTOR_CONFIGS = {
             ],
             ["electronics manufacturer", "hardware manufacturer", "electronic components distributor"],
         ),
+        grid_terms=["electronics manufacturer", "electronic components distributor", "hardware manufacturer"],
     ),
     "industrial": SectorConfig(
         name="industrial",
@@ -154,5 +160,6 @@ SECTOR_CONFIGS = {
             ],
             ["industrial distributor", "wholesale distributor", "manufacturing company", "industrial supplier"],
         ),
+        grid_terms=["industrial distributor", "wholesale distributor", "manufacturing company", "industrial equipment supplier"],
     ),
 }

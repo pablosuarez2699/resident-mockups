@@ -251,6 +251,79 @@ def _domain_key(url: str) -> str:
     return domain.split(".")[0] if domain else ""
 
 
+def _try_add_place(place: dict, sector: SectorConfig, cache: LeadCache, leads: List[Lead]) -> bool:
+    """Run one Places result through every filter; append + record if it passes."""
+    # Skip non-operational or never-ships business types
+    if place.get("businessStatus") not in ("OPERATIONAL", None, ""):
+        return False
+    if not _is_shipping_capable_place(place):
+        return False
+
+    place_id = place.get("id", "")
+    if not place_id or cache.is_seen(place_id, place_id):
+        return False
+
+    # Name-level duplicate check — persistent across runs, so the
+    # same company never reappears in a future batch
+    raw_name = (place.get("displayName") or {}).get("text", "")
+    norm = _norm_name(raw_name)
+    if cache.is_dup_name(norm):
+        log.info("Deduped by name: %s", raw_name)
+        return False
+
+    lead = _build_lead_from_place(place, sector)
+    if lead is None:
+        return False
+
+    # Domain-level duplicate check: brand label matches across
+    # place_ids, UTM variants, and .ca/.com twins (medline.ca == medline.com)
+    dkey = _domain_key(lead.website)
+    if cache.is_dup_domain(dkey):
+        log.info("Deduped by domain: %s (%s)", raw_name, dkey)
+        return False
+
+    # Must be Canadian (double-check province)
+    if not lead.province and "canada" not in place.get("formattedAddress", "").lower():
+        return False
+
+    # Enrich with contact data (Hunter → scraper)
+    lead = _enrich_contact_google_path(lead, sector)
+
+    cache.mark_seen(place_id, place_id)
+    cache.mark_company(norm, dkey)
+    leads.append(lead)
+    return True
+
+
+def _grid_sweep(
+    sector: SectorConfig,
+    cache: LeadCache,
+    leads: List[Lead],
+    leads_needed: int,
+) -> None:
+    """Geo-grid fallback: sweep locationBias circles across Canadian business
+    zones. Surfaces low-prominence companies that never rank in the top-60 of
+    a city-level text query. Only runs when the text terms came up short, and
+    stops the moment the target is met — so it costs nothing on a good run."""
+    from models.geo_grid import GRID_ZONES
+
+    terms = sector.grid_terms or [sector.display_name.split("/")[0].strip()]
+    log.info("[GRID] %s: sweeping geo zones (%d terms, need %d more leads)",
+             sector.display_name, len(terms), leads_needed - len(leads))
+
+    for zone in GRID_ZONES:
+        if len(leads) >= leads_needed:
+            return
+        for term in terms:
+            if len(leads) >= leads_needed:
+                return
+            result = google_places_client.text_search(term, location_bias=zone)
+            places = result.get("places", [])
+            added = sum(1 for p in places if _try_add_place(p, sector, cache, leads))
+            if added:
+                log.info("[GRID] %s / '%s': +%d leads", zone.name, term, added)
+
+
 def _fetch_sector_google(
     sector: SectorConfig,
     cache: LeadCache,
@@ -281,50 +354,15 @@ def _fetch_sector_google(
             for place in places:
                 if len(leads) >= leads_needed:
                     break
-
-                # Skip non-operational or consumer-facing
-                if place.get("businessStatus") not in ("OPERATIONAL", None, ""):
-                    continue
-                if not _is_shipping_capable_place(place):
-                    continue
-
-                place_id = place.get("id", "")
-                if not place_id or cache.is_seen(place_id, place_id):
-                    continue
-
-                # Name-level duplicate check — persistent across runs, so the
-                # same company never reappears in a future batch
-                raw_name = (place.get("displayName") or {}).get("text", "")
-                norm = _norm_name(raw_name)
-                if cache.is_dup_name(norm):
-                    log.info("Deduped by name: %s", raw_name)
-                    continue
-
-                lead = _build_lead_from_place(place, sector)
-                if lead is None:
-                    continue
-
-                # Domain-level duplicate check: brand label matches across
-                # place_ids, UTM variants, and .ca/.com twins (medline.ca == medline.com)
-                dkey = _domain_key(lead.website)
-                if cache.is_dup_domain(dkey):
-                    log.info("Deduped by domain: %s (%s)", raw_name, dkey)
-                    continue
-
-                # Must be Canadian (double-check province)
-                if not lead.province and "canada" not in place.get("formattedAddress", "").lower():
-                    continue
-
-                # Enrich with contact data (Hunter → scraper)
-                lead = _enrich_contact_google_path(lead, sector)
-
-                cache.mark_seen(place_id, place_id)
-                cache.mark_company(norm, dkey)
-                leads.append(lead)
+                _try_add_place(place, sector, cache, leads)
 
             page_token = result.get("nextPageToken")
             if not page_token:
                 break
+
+    # Geo-grid fallback: text terms ran dry before hitting the target
+    if len(leads) < leads_needed:
+        _grid_sweep(sector, cache, leads, leads_needed)
 
     # OSM fallback if Google key missing or returned nothing
     if not leads and not config.GOOGLE_PLACES_API_KEY:

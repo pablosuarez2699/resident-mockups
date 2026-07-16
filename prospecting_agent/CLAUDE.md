@@ -79,9 +79,13 @@ main.py (click CLI)
   `.lead_cache.json` is **committed to git** so history survives ephemeral
   containers — NEVER delete it, never re-gitignore it, and commit it after every
   run. `--no-cache` only bypasses checks for one run (testing); it must never
-  delete history. If the lead well runs dry, expand `google_search_terms` with
-  more city-specific variants (via `_with_city_variants` + `CANADIAN_METROS` in
-  `sector_config.py`) or add metros to that list — never clear the cache.
+  delete history. If the lead well runs dry, the fetcher automatically falls
+  back to the **geo-grid sweep** (`_grid_sweep` in `fetcher.py`): locationBias
+  circles over ~65 Canadian business zones (`models/geo_grid.py`), using each
+  sector's short `grid_terms`. Tight circles surface low-prominence companies
+  that never rank in a city-level text query's top-60. To deepen the well
+  further, add zones to `GRID_ZONES` or metros to `CANADIAN_METROS` — never
+  clear the cache.
 
 ## Lead source paths (current state)
 

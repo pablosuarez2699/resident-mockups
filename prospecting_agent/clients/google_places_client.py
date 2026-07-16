@@ -28,8 +28,16 @@ def _headers() -> dict:
     }
 
 
-def text_search(query: str, page_token: Optional[str] = None) -> Dict[str, Any]:
-    """Text search for Canadian businesses. Returns {places: [...], nextPageToken: str}."""
+def text_search(
+    query: str,
+    page_token: Optional[str] = None,
+    location_bias: Optional[Any] = None,
+) -> Dict[str, Any]:
+    """Text search for Canadian businesses. Returns {places: [...], nextPageToken: str}.
+
+    location_bias: optional GeoZone (models.geo_grid) — biases results into that
+    circle so low-prominence businesses invisible at city level surface.
+    """
     if not config.GOOGLE_PLACES_API_KEY:
         log.warning("GOOGLE_PLACES_API_KEY not set — skipping Google Places call")
         return {}
@@ -40,6 +48,17 @@ def text_search(query: str, page_token: Optional[str] = None) -> Dict[str, Any]:
         "regionCode": "CA",
         "pageSize": 20,
     }
+    if location_bias is not None:
+        payload["locationBias"] = {
+            "circle": {
+                "center": {
+                    "latitude": location_bias.lat,
+                    "longitude": location_bias.lng,
+                },
+                # Places API caps circle radius at 50 km
+                "radius": min(location_bias.radius_m, 50_000),
+            }
+        }
     if page_token:
         payload["pageToken"] = page_token
 
