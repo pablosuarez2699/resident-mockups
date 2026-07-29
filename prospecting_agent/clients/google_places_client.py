@@ -1,3 +1,5 @@
+import time
+
 import requests
 from typing import Dict, Any, Optional
 
@@ -15,6 +17,8 @@ _limiter = RateLimiter(2.0)
 # pointless (every one returns 429/403), so we short-circuit instead of
 # burning ~20 minutes sweeping grid zones that can never return results.
 _quota_exhausted = [False]
+# Consecutive throttle responses; 3 in a row means it is not transient
+_throttle_hits = [0]
 
 
 def quota_exhausted() -> bool:
@@ -89,14 +93,27 @@ def text_search(
             or "Quota exceeded" in resp.text
             or "PERMISSION_DENIED" in resp.text
         ):
-            _quota_exhausted[0] = True
-            log.error(
-                "GOOGLE PLACES DAILY QUOTA EXHAUSTED — aborting all further "
-                "searches this run. Raise the 'Text Search requests per day' "
-                "quota in Google Cloud Console (APIs & Services > Quotas), or "
-                "wait for the reset at midnight Pacific. Detail: %s",
-                resp.text[:300],
+            # Usually a transient per-minute burst limit, not the daily cap
+            # (Google reports both with the same misleading wording). Back off
+            # and retry once; only latch the abort flag if it's still blocked.
+            _throttle_hits[0] += 1
+            log.warning(
+                "Places API throttled (%s) — backing off 60s and retrying (hit %d)",
+                resp.status_code, _throttle_hits[0],
             )
+            time.sleep(60)
+            retry = requests.post(f"{_BASE}:searchText", json=payload, headers=_headers(), timeout=20)
+            if retry.ok:
+                _throttle_hits[0] = 0
+                return retry.json()
+            if _throttle_hits[0] >= 3:
+                _quota_exhausted[0] = True
+                log.error(
+                    "GOOGLE PLACES BLOCKED after %d throttle hits — aborting run. "
+                    "If this persists, check billing status and per-minute quotas "
+                    "in Google Cloud Console. Detail: %s",
+                    _throttle_hits[0], retry.text[:300],
+                )
             return {}
         if not resp.ok:
             log.error("Google Places text_search %s — %s: %s", query[:60], resp.status_code, resp.text[:400])

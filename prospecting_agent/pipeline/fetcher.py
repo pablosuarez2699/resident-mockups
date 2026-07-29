@@ -1,4 +1,5 @@
 import re
+import time
 from datetime import date
 from typing import List, Optional
 from urllib.parse import urlparse
@@ -317,6 +318,11 @@ def _grid_sweep(
         for term in terms:
             if len(leads) >= leads_needed or google_places_client.quota_exhausted():
                 return
+            # Extra spacing on top of the client's limiter: the grid fires many
+            # short back-to-back searches (no pagination pauses between them),
+            # which can burst past the per-minute ceiling and get everything
+            # throttled with a misleading "quota exceeded" error.
+            time.sleep(1.5)
             result = google_places_client.text_search(term, location_bias=zone)
             places = result.get("places", [])
             added = sum(1 for p in places if _try_add_place(p, sector, cache, leads))
