@@ -312,10 +312,10 @@ def _grid_sweep(
              sector.display_name, len(terms), leads_needed - len(leads))
 
     for zone in GRID_ZONES:
-        if len(leads) >= leads_needed:
+        if len(leads) >= leads_needed or google_places_client.quota_exhausted():
             return
         for term in terms:
-            if len(leads) >= leads_needed:
+            if len(leads) >= leads_needed or google_places_client.quota_exhausted():
                 return
             result = google_places_client.text_search(term, location_bias=zone)
             places = result.get("places", [])
@@ -335,12 +335,12 @@ def _fetch_sector_google(
     log.info("[GOOGLE] Fetching sector: %s (%d search terms)", sector.display_name, len(search_terms))
 
     for term in search_terms:
-        if len(leads) >= leads_needed:
+        if len(leads) >= leads_needed or google_places_client.quota_exhausted():
             break
         page_token: Optional[str] = None
 
         for page_num in range(1, pages + 1):
-            if len(leads) >= leads_needed:
+            if len(leads) >= leads_needed or google_places_client.quota_exhausted():
                 break
 
             result = google_places_client.text_search(term, page_token=page_token)

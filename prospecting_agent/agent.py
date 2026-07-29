@@ -97,6 +97,21 @@ def run(
 
     console.print(f"[bold]Total raw leads fetched:[/bold] {len(all_leads)}")
 
+    if config.LEAD_SOURCE == "google":
+        from clients import google_places_client
+        if google_places_client.quota_exhausted():
+            console.print(
+                "\n[bold red]⚠ GOOGLE PLACES DAILY QUOTA EXHAUSTED[/bold red]\n"
+                "The run stopped early — no more searches were possible today.\n"
+                "Fix: Google Cloud Console → APIs & Services → Quotas → "
+                "Places API (New) → raise 'Text Search requests per day'.\n"
+                "Or simply re-run after the quota resets at midnight Pacific.\n"
+            )
+            if not all_leads:
+                console.print("[red]No leads fetched — skipping report generation.[/red]")
+                cache.save()
+                return None
+
     # Salesforce reactivation matching
     if sf_accounts:
         for lead in all_leads:

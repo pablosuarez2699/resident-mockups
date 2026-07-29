@@ -11,6 +11,19 @@ _BASE = "https://places.googleapis.com/v1/places"
 # 2-second spacing: Google requires a wait between paginated Text Search calls
 _limiter = RateLimiter(2.0)
 
+# Set once the project's daily quota is exhausted — further calls this run are
+# pointless (every one returns 429/403), so we short-circuit instead of
+# burning ~20 minutes sweeping grid zones that can never return results.
+_quota_exhausted = [False]
+
+
+def quota_exhausted() -> bool:
+    return _quota_exhausted[0]
+
+
+def reset_quota_flag() -> None:
+    _quota_exhausted[0] = False
+
 # Requesting phone + website puts us in the Advanced tier ($0.032/req).
 # At ~80 calls/month that's ~$2.56 — still under the $200/mo free credit.
 _FIELD_MASK = (
@@ -41,6 +54,8 @@ def text_search(
     if not config.GOOGLE_PLACES_API_KEY:
         log.warning("GOOGLE_PLACES_API_KEY not set — skipping Google Places call")
         return {}
+    if _quota_exhausted[0]:
+        return {}
 
     _limiter.wait()
     payload: dict = {
@@ -69,6 +84,20 @@ def text_search(
             headers=_headers(),
             timeout=20,
         )
+        if resp.status_code in (403, 429) and (
+            "RESOURCE_EXHAUSTED" in resp.text
+            or "Quota exceeded" in resp.text
+            or "PERMISSION_DENIED" in resp.text
+        ):
+            _quota_exhausted[0] = True
+            log.error(
+                "GOOGLE PLACES DAILY QUOTA EXHAUSTED — aborting all further "
+                "searches this run. Raise the 'Text Search requests per day' "
+                "quota in Google Cloud Console (APIs & Services > Quotas), or "
+                "wait for the reset at midnight Pacific. Detail: %s",
+                resp.text[:300],
+            )
+            return {}
         if not resp.ok:
             log.error("Google Places text_search %s — %s: %s", query[:60], resp.status_code, resp.text[:400])
         resp.raise_for_status()
