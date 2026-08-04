@@ -128,15 +128,20 @@ Transportation and Logistics, Wholesaler, Wood, Other, Unassigned.
 
 ## Business rules (domain logic — preserve these)
 
-- **B2B *and* B2C, gated by shipping volume:** the only structural filter is
+- **B2B *and* B2C both qualify:** the only structural filter is
   `_NEVER_SHIPS_TYPES` in `fetcher.py` (`_is_shipping_capable_place`), which drops
   local-service types that never ship parcels (restaurant, salon, gym, hotel,
   dentist, auto shop, etc.). Retail/store types are deliberately **allowed** —
-  a B2C e-commerce / DTC brand qualifies if it ships as much as a B2B (5+
-  parcels/day). The real gate is the `MIN_DAILY_SHIPMENTS` spend filter +
-  Claude's per-company volume estimate, NOT the customer type. Search terms
-  cover both B2B (distributor, supplier, manufacturer, wholesaler) and B2C
-  high-volume shippers (DTC brand, online retailer, subscription box).
+  customer type is never a disqualifier. Search terms cover both B2B
+  (distributor, supplier, manufacturer, wholesaler) and B2C shippers (DTC
+  brand, online retailer, subscription box).
+- **$25K/yr spend filter is OFF by default (user directive).**
+  `MIN_DAILY_SHIPMENTS` defaults to `0`, so no company is dropped for low
+  shipping volume. Claude still *estimates* `est_daily_shipments` and
+  `est_annual_shipping_spend` — that data stays in the pipeline and breaks
+  ties in the non-randomized sort — but it no longer gates inclusion. Run with
+  `MIN_DAILY_SHIPMENTS=5` to re-apply the old $25K/yr bar for one batch. Do not
+  re-enable it by default without the user asking.
 - **3PL risk:** companies on a *group/3PL discount account* get
   `shipping_score` capped at 4 (`three_pl_risk`). Companies with their *own*
   ShipStation/Shippo account are still winnable — NOT flagged.

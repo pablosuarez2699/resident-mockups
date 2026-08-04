@@ -26,10 +26,14 @@ LEAD_SOURCE: str = os.getenv("LEAD_SOURCE", "google")
 GOOGLE_PLACES_API_KEY: str = os.getenv("GOOGLE_PLACES_API_KEY", "")
 HUNTER_DOMAIN_SEARCH_BUDGET: int = int(os.getenv("HUNTER_DOMAIN_SEARCH_BUDGET", "25"))
 
-# Shipping spend filter: companies must average MIN_DAILY_SHIPMENTS parcels per
-# business day. Math: 5/day × 250 days × $20 avg B2B parcel = $25,000/year.
-# Set MIN_DAILY_SHIPMENTS=0 to disable the filter.
-MIN_DAILY_SHIPMENTS: int = int(os.getenv("MIN_DAILY_SHIPMENTS", "5"))
+# Shipping spend filter: drops companies averaging fewer than
+# MIN_DAILY_SHIPMENTS parcels per business day.
+# Math: 5/day × 250 days × $20 avg parcel = $25,000/year.
+# DEFAULT IS 0 (filter OFF) — user directive: don't cull on shipping volume.
+# Claude still estimates volume/spend (shown in the data and used as a sort
+# tie-break); nothing is dropped for it. Set MIN_DAILY_SHIPMENTS=5 to
+# re-enable the $25K/yr bar for a run.
+MIN_DAILY_SHIPMENTS: int = int(os.getenv("MIN_DAILY_SHIPMENTS", "0"))
 
 TARGET_LEADS: int = int(os.getenv("TARGET_LEADS", "100"))
 HUNTER_BUDGET_PER_RUN: int = int(os.getenv("HUNTER_BUDGET_PER_RUN", "50"))
