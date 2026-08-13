@@ -6,6 +6,8 @@ rounded to the nearest cent.
 | Opportunity size (annual) | Revenue per week |
 | ------------------------: | ---------------: |
 |                $25,000.00 |          $480.77 |
+|                $30,000.00 |          $576.92 |
+|                $35,000.00 |          $673.08 |
 |                $40,000.00 |          $769.23 |
 |                $45,000.00 |          $865.38 |
 |                $50,000.00 |          $961.54 |
@@ -31,5 +33,5 @@ rounded to the nearest cent.
 - Every row checks out against `annual / 52`.
 - Step pattern: $5K increments from $25K–$100K, $10K increments from $100K–$150K,
   then a single jump to $300K.
-- Gaps in the ladder: **$30,000** ($576.92/wk) and **$35,000** ($673.08/wk) are missing
-  between $25K and $40K. Add them if the chart is meant to be a complete $5K ladder.
+- The $30,000 and $35,000 rows were derived from the formula to complete the $5K
+  ladder; every other row comes from the original chart.
