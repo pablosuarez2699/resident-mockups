@@ -38,8 +38,24 @@ GRID_ZONES: List[GeoZone] = [
     GeoZone("Montreal-SaintLaurent", 45.5000, -73.7000, 10_000),
     GeoZone("Montreal-Anjou-East", 45.6100, -73.5600, 12_000),
     GeoZone("Montreal-Dorval-Lachine", 45.4470, -73.7440, 10_000),
+    GeoZone("Montreal-Downtown-Plateau", 45.5088, -73.5878, 8_000),
+    GeoZone("Montreal-LaSalle-Verdun", 45.4300, -73.6200, 8_000),
+    GeoZone("Montreal-Nord-Montreal", 45.6000, -73.6300, 8_000),
     GeoZone("Laval", 45.6066, -73.7124, 15_000),
     GeoZone("Longueuil-SouthShore", 45.5312, -73.5181, 15_000),
+    GeoZone("Brossard-LaPrairie", 45.4500, -73.4660, 12_000),
+    GeoZone("Boucherville-Varennes", 45.6100, -73.4300, 12_000),
+    GeoZone("Terrebonne-Mascouche", 45.7000, -73.6400, 15_000),
+    GeoZone("Repentigny", 45.7420, -73.4500, 12_000),
+    GeoZone("Vaudreuil-Dorion", 45.4000, -74.0300, 15_000),
+    GeoZone("Saint-Jerome", 45.7800, -74.0030, 15_000),
+    GeoZone("Saint-Eustache-Deux-Montagnes", 45.5650, -73.9050, 12_000),
+    GeoZone("Saint-Hyacinthe", 45.6300, -72.9500, 20_000),
+    GeoZone("Salaberry-de-Valleyfield", 45.2500, -74.1300, 20_000),
+    GeoZone("Granby", 45.4000, -72.7300, 20_000),
+    GeoZone("Saint-Jean-sur-Richelieu", 45.3070, -73.2620, 18_000),
+    GeoZone("Joliette", 46.0200, -73.4400, 20_000),
+    GeoZone("Sorel-Tracy", 46.0400, -73.1100, 20_000),
     # --- Greater Vancouver sub-zones ---
     GeoZone("Burnaby", 49.2488, -122.9805, 10_000),
     GeoZone("Richmond BC", 49.1666, -123.1336, 10_000),
@@ -100,3 +116,40 @@ GRID_ZONES: List[GeoZone] = [
     GeoZone("Thunder Bay", 48.3809, -89.2477, 30_000),
     GeoZone("Sault Ste. Marie", 46.5219, -84.3461, 25_000),
 ]
+
+
+# Named region presets for `--region`. Each maps to the GeoZone names that
+# make up that market, so a run can be geographically scoped (e.g. a rep
+# working only the Montreal territory). Zone lists are matched exactly.
+REGIONS = {
+    "montreal": [
+        "Montreal-SaintLaurent", "Montreal-Anjou-East", "Montreal-Dorval-Lachine",
+        "Montreal-Downtown-Plateau", "Montreal-LaSalle-Verdun", "Montreal-Nord-Montreal",
+        "Laval", "Longueuil-SouthShore", "Brossard-LaPrairie",
+        "Boucherville-Varennes", "Terrebonne-Mascouche", "Repentigny",
+        "Vaudreuil-Dorion", "Saint-Jerome", "Saint-Eustache-Deux-Montagnes",
+        "Saint-Hyacinthe", "Salaberry-de-Valleyfield", "Granby",
+        "Saint-Jean-sur-Richelieu", "Joliette", "Sorel-Tracy",
+    ],
+    "toronto": [
+        "Toronto-Etobicoke", "Toronto-Scarborough", "Toronto-NorthYork",
+        "Mississauga", "Brampton", "Vaughan-Concord", "Markham-Richmond Hill",
+        "Oakville-Burlington", "Hamilton", "Oshawa-Whitby",
+    ],
+    "vancouver": [
+        "Burnaby", "Richmond BC", "Surrey", "Delta-Tilbury", "Langley",
+        "Coquitlam-PortCoquitlam", "Abbotsford-Chilliwack",
+    ],
+    "calgary": ["Calgary-NE", "Calgary-SE-Foothills"],
+    "edmonton": ["Edmonton-South", "Edmonton-West", "Nisku-Leduc"],
+    "ottawa": ["Ottawa", "Gatineau"],
+    "quebec": [
+        "Quebec City", "Sherbrooke", "Trois-Rivieres", "Drummondville", "Saguenay",
+    ],
+}
+
+
+def zones_for_region(region: str):
+    """Return the GeoZones for a named region, or [] if unknown."""
+    names = set(REGIONS.get(region.lower().strip(), []))
+    return [z for z in GRID_ZONES if z.name in names]

@@ -30,6 +30,7 @@ def run(
     use_cache: bool = True,
     dry_run: bool = False,
     randomize: bool = False,
+    region: Optional[str] = None,
 ) -> Optional[str]:
 
     cache = LeadCache()
@@ -62,6 +63,7 @@ def run(
 
     # Reset Hunter domain-search budget for this run (Google path only)
     fetcher_module.init_run()
+    fetcher_module.set_region(region)
 
     if dry_run:
         console.print("[yellow]Dry run: validating API connectivity...[/yellow]")

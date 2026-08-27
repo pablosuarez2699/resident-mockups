@@ -53,6 +53,16 @@ _NEVER_SHIPS_TYPES = {
 _domain_budget: List[int] = [0]
 
 
+# Active geographic region for this run (None = all of Canada). When set, the
+# national text-search terms are skipped entirely — they would return companies
+# from Toronto/Vancouver/etc — and leads come only from that region's geo zones.
+_active_region: List[Optional[str]] = [None]
+
+
+def set_region(region: Optional[str]) -> None:
+    _active_region[0] = region
+
+
 def init_run() -> None:
     """Reset the Hunter domain-search budget counter for a fresh run."""
     _domain_budget[0] = config.HUNTER_DOMAIN_SEARCH_BUDGET
@@ -306,13 +316,19 @@ def _grid_sweep(
     zones. Surfaces low-prominence companies that never rank in the top-60 of
     a city-level text query. Only runs when the text terms came up short, and
     stops the moment the target is met — so it costs nothing on a good run."""
-    from models.geo_grid import GRID_ZONES
+    from models.geo_grid import GRID_ZONES, zones_for_region
+
+    region = _active_region[0]
+    zones = zones_for_region(region) if region else GRID_ZONES
 
     terms = sector.grid_terms or [sector.display_name.split("/")[0].strip()]
-    log.info("[GRID] %s: sweeping geo zones (%d terms, need %d more leads)",
-             sector.display_name, len(terms), leads_needed - len(leads))
+    log.info("[GRID] %s: sweeping %d geo zones%s (%d terms, need %d more leads)",
+             sector.display_name, len(zones),
+             f" in region '{region}'" if region else "",
+             len(terms), leads_needed - len(leads))
 
-    for zone in GRID_ZONES:
+    # Region runs may need several passes over a smaller zone set to hit target
+    for zone in zones:
         if len(leads) >= leads_needed or google_places_client.quota_exhausted():
             return
         for term in terms:
@@ -337,6 +353,16 @@ def _fetch_sector_google(
     leads_needed: int,
 ) -> List[Lead]:
     leads: List[Lead] = []
+
+    # Region-scoped run: skip the national text terms (they return companies
+    # from anywhere in Canada) and source everything from the region's zones.
+    if _active_region[0]:
+        log.info("[GOOGLE] Region run '%s' — grid-only for sector %s",
+                 _active_region[0], sector.display_name)
+        _grid_sweep(sector, cache, leads, leads_needed)
+        log.info("[GOOGLE] Sector %s: fetched %d leads", sector.display_name, len(leads))
+        return leads
+
     search_terms = sector.google_search_terms or [f"{sector.display_name} company Canada"]
     log.info("[GOOGLE] Fetching sector: %s (%d search terms)", sector.display_name, len(search_terms))
 

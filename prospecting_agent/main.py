@@ -17,7 +17,11 @@ console = Console()
 @click.option("--dry-run", is_flag=True, default=False, help="Validate API keys without generating leads")
 @click.option("--randomize", is_flag=True, default=False,
               help="Shuffle final leads within score bands for a diverse sector mix")
-def main(sectors, leads, hunter_budget, pages, sf_export, no_cache, dry_run, randomize):
+@click.option("--region", default=None,
+              help="Restrict search to one market (montreal, toronto, vancouver, "
+                   "calgary, edmonton, ottawa, quebec). Sweeps that region's geo "
+                   "zones only — no national results.")
+def main(sectors, leads, hunter_budget, pages, sf_export, no_cache, dry_run, randomize, region):
     """Purolator SMB Prospecting Agent — generate qualified Canadian B2B shipping leads."""
     from agent import run
     from models.sector_config import SECTOR_CONFIGS
@@ -30,7 +34,17 @@ def main(sectors, leads, hunter_budget, pages, sf_export, no_cache, dry_run, ran
 
     console.print(f"[bold purple]Purolator SMB Prospecting Agent[/bold purple]")
     console.print(f"Sectors: {', '.join(sector_list)} | Target: {leads} leads"
-                  + (" | [cyan]randomized[/cyan]" if randomize else ""))
+                  + (" | [cyan]randomized[/cyan]" if randomize else "")
+                  + (f" | [green]region: {region}[/green]" if region else ""))
+
+    if region:
+        from models.geo_grid import REGIONS, zones_for_region
+        if region.lower().strip() not in REGIONS:
+            console.print(f"[red]Unknown region '{region}'. Choose from: "
+                          f"{', '.join(REGIONS)}[/red]")
+            return
+        console.print(f"[green]Searching {len(zones_for_region(region))} geo zones "
+                      f"in the {region} market[/green]")
     if sf_export:
         console.print(f"Salesforce export: {sf_export}")
 
@@ -43,6 +57,7 @@ def main(sectors, leads, hunter_budget, pages, sf_export, no_cache, dry_run, ran
         use_cache=not no_cache,
         dry_run=dry_run,
         randomize=randomize,
+        region=region,
     )
 
     if output:
